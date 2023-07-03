@@ -20,12 +20,29 @@ MAX_ANGLE_HALF = 90
 # set up arduino board
 board = pyfirmata.Arduino('COM4')
 
-# %% setup servo on pin 2
-angle_servo1 = 10  # initial angle
+# # %% setup servo on pin 2
+# angle_servo1 = 10  # initial angle
 da = 2  # initial speed (degrees per keypress)
-servo1 = board.get_pin('d:2:s')  # pin to communicate to the servo with
-servo1.write(angle_servo1)  # set servo to initial angle
 
+
+# servo1 = board.get_pin('d:2:s')  # pin to communicate to the servo with
+# servo1.write(angle_servo1)  # set servo to initial angle
+#
+# angle_servo2 = 10  # initial angle
+# servo2 = board.get_pin('d:3:s')  # pin to communicate to the servo with
+# servo2.write(angle_servo2)  # set servo to initial angle
+
+class Servo:
+    def __init__(self, angle_servo, pin):
+        self.angle_servo = angle_servo
+        self.servo = board.get_pin('d:' + str(pin) + ':s')
+
+
+servomotors = []
+for i in range(2, 4):
+    servo_motor = Servo(10,i)
+    servo_motor.servo.write(servo_motor.angle_servo)
+    servomotors.append(servo_motor)
 # for al the connected joysticks
 for i in range(0, pygame.joystick.get_count()):
     # create an Joystick object in our list
@@ -76,6 +93,7 @@ def dec_serv_angle(angle_servo, inc, min_ang, servo):
 
 events = []
 # %% while loop
+gpad = joysticks[-1]
 while True:
     clock.tick(60)
 
@@ -83,14 +101,19 @@ while True:
     if len(new_events) != 0:
         events = new_events
 
-    horizontal_axis_l = joysticks[-1].get_axis(0)
-    vertical_axis_l = joysticks[-1].get_axis(1)
+    horizontal_axis_l = gpad.get_axis(0)
+    vertical_axis_l = gpad.get_axis(1)
 
-    horizontal_axis_r = joysticks[-1].get_axis(2)
-    vertical_axis_r = joysticks[-1].get_axis(3)
+    horizontal_axis_r = gpad.get_axis(2)
+    vertical_axis_r = gpad.get_axis(3)
 
-    if joysticks[-1].get_button(pygame.CONTROLLER_BUTTON_A):
-        angle_servo1 = dec_serv_angle(angle_servo1, da, MIN_ANGLE, servo1)
+    if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
+        servomotors[0].angle_servo = dec_serv_angle(servomotors[0].angle_servo, da, MIN_ANGLE, servomotors[0].servo)
 
-    elif joysticks[-1].get_button(pygame.CONTROLLER_BUTTON_B):
-        angle_servo1 = inc_serv_angle(angle_servo1, da, MAX_ANGLE_HALF, servo1)
+    elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
+        servomotors[0].angle_servo = inc_serv_angle(servomotors[0].angle_servo, da, MAX_ANGLE_HALF, servomotors[0].servo)
+
+    if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
+        servomotors[1].angle_servo = dec_serv_angle(servomotors[1].angle_servo, da, MIN_ANGLE, servomotors[1].servo)
+    elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
+        servomotors[1].angle_servo = inc_serv_angle(servomotors[1].angle_servo, da, MAX_ANGLE_FULL, servomotors[1].servo)
