@@ -39,7 +39,7 @@ class Servo:
 
 
 servomotors = []
-for i in range(2, 4):
+for i in range(2,5):
     servo_motor = Servo(10,i)
     servo_motor.servo.write(servo_motor.angle_servo)
     servomotors.append(servo_motor)
@@ -94,6 +94,18 @@ def dec_serv_angle(angle_servo, inc, min_ang, servo):
 events = []
 # %% while loop
 gpad = joysticks[-1]
+
+
+def move_servo_up(servo_num, min_angle):
+    servomotors[servo_num].angle_servo = dec_serv_angle(servomotors[servo_num].angle_servo, da, min_angle,
+                                                        servomotors[servo_num].servo)
+
+
+def move_servo_down(servo_num, max_angle):
+    servomotors[servo_num].angle_servo = inc_serv_angle(servomotors[servo_num].angle_servo, da, max_angle,
+                                                        servomotors[servo_num].servo)
+
+
 while True:
     clock.tick(60)
 
@@ -108,12 +120,16 @@ while True:
     vertical_axis_r = gpad.get_axis(3)
 
     if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
-        servomotors[0].angle_servo = dec_serv_angle(servomotors[0].angle_servo, da, MIN_ANGLE, servomotors[0].servo)
-
+        move_servo_up(0, MIN_ANGLE)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
-        servomotors[0].angle_servo = inc_serv_angle(servomotors[0].angle_servo, da, MAX_ANGLE_HALF, servomotors[0].servo)
+        move_servo_down(0, MAX_ANGLE_HALF)
 
     if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
-        servomotors[1].angle_servo = dec_serv_angle(servomotors[1].angle_servo, da, MIN_ANGLE, servomotors[1].servo)
+        move_servo_up(1, MIN_ANGLE)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
-        servomotors[1].angle_servo = inc_serv_angle(servomotors[1].angle_servo, da, MAX_ANGLE_FULL, servomotors[1].servo)
+        move_servo_down(1, MAX_ANGLE_FULL)
+
+    if check_stick_up(horizontal_axis_l, vertical_axis_l):
+        move_servo_up(2, MIN_ANGLE)
+    elif check_stick_down(horizontal_axis_l, vertical_axis_l):
+        move_servo_down(2, MAX_ANGLE_FULL)
