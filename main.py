@@ -39,10 +39,11 @@ class Servo:
 
 
 servomotors = []
-for i in range(2,5):
-    servo_motor = Servo(10,i)
+for i in range(2, 8):
+    servo_motor = Servo(70, i)
     servo_motor.servo.write(servo_motor.angle_servo)
     servomotors.append(servo_motor)
+
 # for al the connected joysticks
 for i in range(0, pygame.joystick.get_count()):
     # create an Joystick object in our list
@@ -133,3 +134,18 @@ while True:
         move_servo_up(2, MIN_ANGLE)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
         move_servo_down(2, MAX_ANGLE_FULL)
+
+    if check_stick_left(horizontal_axis_l, vertical_axis_l):
+        move_servo_up(3, MIN_ANGLE)
+    elif check_stick_right(horizontal_axis_l, vertical_axis_l):
+        move_servo_down(3, MAX_ANGLE_FULL)
+
+    if check_stick_up(horizontal_axis_r, vertical_axis_r):
+        move_servo_up(4, MIN_ANGLE)
+    elif check_stick_down(horizontal_axis_r, vertical_axis_r):
+        move_servo_down(4, MAX_ANGLE_FULL)
+
+    if check_stick_left(horizontal_axis_r, vertical_axis_r):
+        move_servo_up(5, MIN_ANGLE)
+    elif check_stick_right(horizontal_axis_r, vertical_axis_r):
+        move_servo_down(5, MAX_ANGLE_FULL)
