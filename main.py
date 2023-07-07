@@ -22,7 +22,7 @@ board = pyfirmata.Arduino('COM4')
 
 # # %% setup servo on pin 2
 # angle_servo1 = 10  # initial angle
-da = .5  # initial speed (degrees per keypress)
+da = .25  # initial speed (degrees per keypress)
 
 
 # servo1 = board.get_pin('d:2:s')  # pin to communicate to the servo with
@@ -110,7 +110,7 @@ def move_servo_down(servo_num, max_angle):
 
 
 while True:
-    clock.tick(90)
+    clock.tick(120)
 
     new_events = pygame.event.get()
     if len(new_events) != 0:
