@@ -42,7 +42,7 @@ servo_init_angle = [70, 70, 180, 45, 90, 70]
 
 servomotors = []
 for i in range(2, 8):
-    servo_motor = Servo(servo_init_angle[i-2], i)
+    servo_motor = Servo(servo_init_angle[i - 2], i)
     servo_motor.servo.write(servo_motor.angle_servo)
     servomotors.append(servo_motor)
 
@@ -131,7 +131,6 @@ while True:
         move_servo_up(1, MIN_ANGLE)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
         move_servo_down(1, MAX_ANGLE_FULL)
-
 
     if check_stick_right(horizontal_axis_l, vertical_axis_l):
         move_servo_up(2, MIN_ANGLE)
