@@ -132,9 +132,9 @@ while True:
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
         move_servo_down(1, MAX_ANGLE_FULL)
 
-    if check_stick_right(horizontal_axis_l, vertical_axis_l):
+    if check_stick_left(horizontal_axis_l, vertical_axis_l):
         move_servo_up(2, MIN_ANGLE)
-    elif check_stick_left(horizontal_axis_l, vertical_axis_l):
+    elif check_stick_right(horizontal_axis_l, vertical_axis_l):
         move_servo_down(2, MAX_ANGLE_FULL)
 
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
