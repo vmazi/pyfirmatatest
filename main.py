@@ -1,6 +1,7 @@
 import pyfirmata
 
 import pygame
+import keyboard
 
 DEADZONE = .2
 
@@ -147,3 +148,7 @@ while True:
         move_servo_up(5, MIN_ANGLE)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
         move_servo_down(5, MAX_ANGLE_FULL)
+
+    if keyboard.is_pressed('a'):
+        for i in range(0, len(servomotors)):
+            print('servo:' + str(i+1) + ' has angle: ', str(servomotors[i].angle_servo))
