@@ -1,6 +1,3 @@
-# %% import libraries
-import time
-import keyboard
 import pyfirmata
 
 import pygame
@@ -48,7 +45,7 @@ for i in range(2, 8):
 
 # for al the connected joysticks
 for i in range(0, pygame.joystick.get_count()):
-    # create an Joystick object in our list
+    # create a Joystick object in our list
     joysticks.append(pygame.joystick.Joystick(i))
     # initialize the appended joystick (-1 means last array item)
     joysticks[-1].init()
@@ -61,7 +58,6 @@ def move_servo(servo, deg):  # define function
     servo.write(deg)  # move servo to specified angle
 
 
-# %%
 def check_stick_up(x_axis, y_axis):
     return y_axis < -DEADZONE and abs(y_axis) > abs(x_axis)
 
