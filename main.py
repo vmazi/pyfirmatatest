@@ -151,4 +151,16 @@ while True:
 
     if keyboard.is_pressed('a'):
         for i in range(0, len(servomotors)):
-            print('servo:' + str(i+1) + ' has angle: ', str(servomotors[i].angle_servo))
+            print('servo:' + str(i + 1) + ' has angle: ', str(servomotors[i].angle_servo))
+
+    if keyboard.is_pressed('s'):
+        servomotors[2].angle_servo = 42.5
+        move_servo(servomotors[2].servo, servomotors[2].angle_servo)
+        servomotors[4].angle_servo = 100.0
+        move_servo(servomotors[4].servo, servomotors[4].angle_servo)
+
+    if keyboard.is_pressed('c'):
+        servomotors[2].angle_servo = 35.0
+        move_servo(servomotors[2].servo, servomotors[2].angle_servo)
+        servomotors[4].angle_servo = 82.0
+        move_servo(servomotors[4].servo, servomotors[4].angle_servo)
