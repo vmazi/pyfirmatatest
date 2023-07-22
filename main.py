@@ -13,7 +13,7 @@ MIN_ANGLE = 10
 
 MAX_ANGLE_FULL = 180
 
-MAX_ANGLE_HALF = 90
+MAX_ANGLE_HALF = 110
 
 # set up arduino board
 board = pyfirmata.Arduino('COM4')
