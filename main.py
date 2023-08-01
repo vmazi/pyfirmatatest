@@ -145,9 +145,9 @@ while True:
         move_servo_down(4, MAX_ANGLE_FULL)
 
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
-        move_servo_up(5, MIN_ANGLE)
+        move_servo_up(5, 36.5)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
-        move_servo_down(5, MAX_ANGLE_FULL)
+        move_servo_down(5, 167)
 
     if keyboard.is_pressed('a'):
         for i in range(0, len(servomotors)):
