@@ -36,7 +36,7 @@ class Servo:
         self.servo = board.get_pin('d:' + str(pin) + ':s')
 
 
-servo_init_angle = [10, 70, 180, 45, 90, 70]
+servo_init_angle = [40, 70, 180, 45, 90, 70]
 
 servomotors = []
 for i in range(2, 8):
@@ -108,7 +108,7 @@ def increase_servo_angle(servo_num, max_angle):
 
 def check_claw_input():
     if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
-        increase_servo_angle(0, 87)
+        increase_servo_angle(0, 88)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
         decrease_servo_angle(0, 40)
 
