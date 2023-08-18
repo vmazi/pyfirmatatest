@@ -96,71 +96,109 @@ events = []
 gpad = joysticks[-1]
 
 
-def move_servo_up(servo_num, min_angle):
+def decrease_servo_angle(servo_num, min_angle):
     servomotors[servo_num].angle_servo = dec_serv_angle(servomotors[servo_num].angle_servo, da, min_angle,
                                                         servomotors[servo_num].servo)
 
 
-def move_servo_down(servo_num, max_angle):
+def increase_servo_angle(servo_num, max_angle):
     servomotors[servo_num].angle_servo = inc_serv_angle(servomotors[servo_num].angle_servo, da, max_angle,
                                                         servomotors[servo_num].servo)
 
 
-while True:
-    clock.tick(120)
-
-    new_events = pygame.event.get()
-    if len(new_events) != 0:
-        events = new_events
-
-    horizontal_axis_l = gpad.get_axis(0)
-    vertical_axis_l = gpad.get_axis(1)
-
-    horizontal_axis_r = gpad.get_axis(2)
-    vertical_axis_r = gpad.get_axis(3)
-
+def check_claw_input():
     if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
-        move_servo_down(0, 65)
+        increase_servo_angle(0, 87)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
-        move_servo_up(0,10)
+        decrease_servo_angle(0, 40)
 
+
+def check_claw_rotate():
     if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
-        move_servo_up(1, MIN_ANGLE)
+        decrease_servo_angle(1, MIN_ANGLE)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
-        move_servo_down(1, MAX_ANGLE_FULL)
+        increase_servo_angle(1, MAX_ANGLE_FULL)
 
+
+def check_base_rotate():
     if check_stick_left(horizontal_axis_l, vertical_axis_l):
-        move_servo_up(2, MIN_ANGLE)
+        decrease_servo_angle(2, MIN_ANGLE)
     elif check_stick_right(horizontal_axis_l, vertical_axis_l):
-        move_servo_down(2, MAX_ANGLE_FULL)
+        increase_servo_angle(2, MAX_ANGLE_FULL)
 
+
+def check_primary_vert():
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
-        move_servo_up(3, MIN_ANGLE)
+        decrease_servo_angle(3, MIN_ANGLE)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
-        move_servo_down(3, MAX_ANGLE_FULL)
+        increase_servo_angle(3, MAX_ANGLE_FULL)
 
+
+def check_secondary_vert():
     if check_stick_up(horizontal_axis_r, vertical_axis_r):
-        move_servo_up(4, MIN_ANGLE)
+        decrease_servo_angle(4, MIN_ANGLE)
     elif check_stick_down(horizontal_axis_r, vertical_axis_r):
-        move_servo_down(4, MAX_ANGLE_FULL)
+        increase_servo_angle(4, MAX_ANGLE_FULL)
 
+
+def check_tert_vert():
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
-        move_servo_up(5, 36.5)
+        decrease_servo_angle(5, 36.5)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
-        move_servo_down(5, 167)
+        increase_servo_angle(5, 167)
 
-    if keyboard.is_pressed('a'):
-        for i in range(0, len(servomotors)):
-            print('servo:' + str(i + 1) + ' has angle: ', str(servomotors[i].angle_servo))
 
+def check_move_to_stance():
     if keyboard.is_pressed('s'):
         servomotors[2].angle_servo = 42.5
         move_servo(servomotors[2].servo, servomotors[2].angle_servo)
         servomotors[4].angle_servo = 100.0
         move_servo(servomotors[4].servo, servomotors[4].angle_servo)
 
+
+def check_chop_input():
     if keyboard.is_pressed('c'):
         servomotors[2].angle_servo = 35.0
         move_servo(servomotors[2].servo, servomotors[2].angle_servo)
         servomotors[4].angle_servo = 82.0
         move_servo(servomotors[4].servo, servomotors[4].angle_servo)
+
+
+def check_print_angle():
+    global i
+    if keyboard.is_pressed('a'):
+        for i in range(0, len(servomotors)):
+            print('servo:' + str(i + 1) + ' has angle: ', str(servomotors[i].angle_servo))
+
+
+if __name__ == '__main__':
+    while True:
+        clock.tick(120)
+
+        new_events = pygame.event.get()
+        if len(new_events) != 0:
+            events = new_events
+
+        horizontal_axis_l = gpad.get_axis(0)
+        vertical_axis_l = gpad.get_axis(1)
+
+        horizontal_axis_r = gpad.get_axis(2)
+        vertical_axis_r = gpad.get_axis(3)
+
+        check_claw_input()
+
+        check_claw_rotate()
+
+        check_base_rotate()
+
+        check_primary_vert()
+
+        check_secondary_vert()
+
+        check_tert_vert()
+
+        check_print_angle()
+
+        check_move_to_stance()
+
+        check_chop_input()
