@@ -36,7 +36,7 @@ class Servo:
         self.servo = board.get_pin('d:' + str(pin) + ':s')
 
 
-servo_init_angle = [40, 70, 180, 45, 90, 70]
+servo_init_angle = [40, 33, 47, 130, 90, 100]
 
 servomotors = []
 for i in range(2, 8):
