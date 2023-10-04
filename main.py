@@ -16,7 +16,7 @@ MAX_ANGLE_FULL = 180
 MAX_ANGLE_HALF = 110
 
 # set up arduino board
-board = pyfirmata.Arduino('COM4')
+board = pyfirmata.Arduino('COM3')
 
 # # %% setup servo on pin 2
 # angle_servo1 = 10  # initial angle
