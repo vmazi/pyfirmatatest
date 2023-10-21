@@ -168,7 +168,7 @@ def check_print_angle():
     global i
     if keyboard.is_pressed('a'):
         for i in range(0, len(servomotors)):
-            print('servo:' + str(i + 1) + ' has angle: ', str(servomotors[i].angle_servo))
+            print('servo:' + str(i) + ' has angle: ', str(servomotors[i].angle_servo))
 
 
 if __name__ == '__main__':
