@@ -120,28 +120,28 @@ def check_claw_rotate():
         increase_servo_angle(1, MAX_ANGLE_FULL)
 
 
-def check_base_rotate():
+def check_tert_vert():
     if check_stick_left(horizontal_axis_l, vertical_axis_l):
         decrease_servo_angle(2, MIN_ANGLE)
     elif check_stick_right(horizontal_axis_l, vertical_axis_l):
         increase_servo_angle(2, MAX_ANGLE_FULL)
 
 
-def check_primary_vert():
+def check_secondary_vert():
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
         decrease_servo_angle(3, MIN_ANGLE)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
         increase_servo_angle(3, MAX_ANGLE_FULL)
 
 
-def check_secondary_vert():
+def check_primary_vert():
     if check_stick_up(horizontal_axis_r, vertical_axis_r):
         decrease_servo_angle(4, MIN_ANGLE)
     elif check_stick_down(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(4, MAX_ANGLE_FULL)
 
 
-def check_tert_vert():
+def check_base_rotate():
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
         decrease_servo_angle(5, 36.5)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
