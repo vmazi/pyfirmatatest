@@ -36,10 +36,10 @@ class Servo:
         self.servo = board.get_pin('d:' + str(pin) + ':s')
 
 
-servo_init_angle = [40, 33, 47, 130, 90, 100, 40, 33]
+servo_init_angle = [50, 33, 47, 130, 90, 100, 50, 33, 47, 80, 90, 100]
 
 servomotors = []
-for i in range(2, 10):
+for i in range(2, 14):
     servo_motor = Servo(servo_init_angle[i - 2], i)
     servo_motor.servo.write(servo_motor.angle_servo)
     servomotors.append(servo_motor)
@@ -127,29 +127,39 @@ def check_claw_rotate():
 def check_tert_vert():
     if check_stick_left(horizontal_axis_l, vertical_axis_l):
         decrease_servo_angle(2, MIN_ANGLE)
+        decrease_servo_angle(8, MIN_ANGLE)
     elif check_stick_right(horizontal_axis_l, vertical_axis_l):
         increase_servo_angle(2, MAX_ANGLE_FULL)
+        increase_servo_angle(8, MAX_ANGLE_FULL)
 
 
 def check_secondary_vert():
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
         decrease_servo_angle(3, MIN_ANGLE)
+        decrease_servo_angle(9, MIN_ANGLE)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
         increase_servo_angle(3, MAX_ANGLE_FULL)
+        increase_servo_angle(9, MAX_ANGLE_FULL)
 
 
 def check_primary_vert():
     if check_stick_up(horizontal_axis_r, vertical_axis_r):
         decrease_servo_angle(4, MIN_ANGLE)
+        decrease_servo_angle(10, MIN_ANGLE)
     elif check_stick_down(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(4, MAX_ANGLE_FULL)
+        increase_servo_angle(10, MAX_ANGLE_FULL)
 
 
 def check_base_rotate():
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
         decrease_servo_angle(5, 36.5)
+        decrease_servo_angle(11, 36.5)
+
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(5, 167)
+        increase_servo_angle(11, 167)
+
 
 
 def check_move_to_stance():
