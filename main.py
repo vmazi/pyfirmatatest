@@ -224,13 +224,13 @@ if __name__ == '__main__':
 
         check_claw_rotate()
 
-        check_base_rotate()
-
-        check_primary_vert()
+        check_tert_vert()
 
         check_secondary_vert()
 
-        check_tert_vert()
+        check_primary_vert()
+
+        check_base_rotate()
 
         check_print_angle()
 
