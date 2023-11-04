@@ -109,18 +109,28 @@ def increase_servo_angle(servo_num, max_angle):
 def check_claw_input():
     if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
         increase_servo_angle(0, 88)
-        increase_servo_angle(6, 88)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
         decrease_servo_angle(0, 40)
+
+
+def check_silver_claw_input():
+    if gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT) > .5:
+        increase_servo_angle(6, 88)
+    elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
         decrease_servo_angle(6, 40)
 
 
 def check_claw_rotate():
     if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
         decrease_servo_angle(1, MIN_ANGLE)
-        decrease_servo_angle(7, MIN_ANGLE)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
         increase_servo_angle(1, MAX_ANGLE_FULL)
+
+
+def check_silver_claw_rotate():
+    if keyboard.is_pressed('y'):
+        decrease_servo_angle(7, MIN_ANGLE)
+    elif keyboard.is_pressed('u'):
         increase_servo_angle(7, MAX_ANGLE_FULL)
 
 
@@ -161,7 +171,6 @@ def check_base_rotate():
         increase_servo_angle(11, 167)
 
 
-
 def check_move_to_stance():
     if keyboard.is_pressed('s'):
         servomotors[2].angle_servo = 42.5
@@ -181,6 +190,8 @@ def check_chop_input():
 def check_print_angle():
     global i
     if keyboard.is_pressed('a'):
+        print(gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT))
+        print(gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT))
         for i in range(0, len(servomotors)):
             print('servo:' + str(i) + ' has angle: ', str(servomotors[i].angle_servo))
 
@@ -216,3 +227,13 @@ if __name__ == '__main__':
         check_move_to_stance()
 
         check_chop_input()
+
+        check_silver_claw_input()
+
+        check_silver_claw_rotate()
+
+        if gpad.get_button(9):
+            print("right stick pressed")
+
+        if gpad.get_button(8):
+            print("left stick pressed")
