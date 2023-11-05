@@ -128,9 +128,9 @@ def check_claw_rotate():
 
 
 def check_silver_claw_rotate():
-    if keyboard.is_pressed('y'):
+    if gpad.get_button(4):
         decrease_servo_angle(7, MIN_ANGLE)
-    elif keyboard.is_pressed('u'):
+    elif gpad.get_button(5):
         increase_servo_angle(7, MAX_ANGLE_FULL)
 
 
@@ -170,9 +170,9 @@ def check_primary_vert():
 
 
 def check_silver_primary_vert():
-    if keyboard.is_pressed('e'):
+    if gpad.get_hat(0) == (0, 1):
         decrease_servo_angle(10, MIN_ANGLE)
-    elif keyboard.is_pressed('r'):
+    elif gpad.get_hat(0) == (0, -1):
         increase_servo_angle(10, MAX_ANGLE_FULL)
 
 
@@ -184,9 +184,9 @@ def check_base_rotate():
 
 
 def check_silver_base_rotate():
-    if keyboard.is_pressed('d'):
+    if gpad.get_hat(0) == (-1, 0):
         decrease_servo_angle(11, 36.5)
-    elif keyboard.is_pressed('f'):
+    elif gpad.get_hat(0) == (1, 0):
         increase_servo_angle(11, 167)
 
 
@@ -222,6 +222,8 @@ if __name__ == '__main__':
         new_events = pygame.event.get()
         if len(new_events) != 0:
             events = new_events
+            for event in events:
+                print(event)
 
         horizontal_axis_l = gpad.get_axis(0)
         vertical_axis_l = gpad.get_axis(1)
