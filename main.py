@@ -170,9 +170,9 @@ def check_primary_vert():
 
 
 def check_silver_primary_vert():
-    if gpad.get_hat(0) == (0, 1):
+    if gpad.get_hat(0) == (1, 0):
         decrease_servo_angle(10, MIN_ANGLE)
-    elif gpad.get_hat(0) == (0, -1):
+    elif gpad.get_hat(0) ==(-1, 0):
         increase_servo_angle(10, MAX_ANGLE_FULL)
 
 
@@ -184,9 +184,11 @@ def check_base_rotate():
 
 
 def check_silver_base_rotate():
-    if gpad.get_hat(0) == (-1, 0):
+    if gpad.get_hat(0) == (0, 1):
+
         decrease_servo_angle(11, 36.5)
-    elif gpad.get_hat(0) == (1, 0):
+    elif gpad.get_hat(0) == (0, -1):
+
         increase_servo_angle(11, 167)
 
 
