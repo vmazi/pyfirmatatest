@@ -165,19 +165,28 @@ def check_silver_secondary_vert():
 def check_primary_vert():
     if check_stick_up(horizontal_axis_r, vertical_axis_r):
         decrease_servo_angle(4, MIN_ANGLE)
-        decrease_servo_angle(10, MIN_ANGLE)
     elif check_stick_down(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(4, MAX_ANGLE_FULL)
+
+
+def check_silver_primary_vert():
+    if keyboard.is_pressed('e'):
+        decrease_servo_angle(10, MIN_ANGLE)
+    elif keyboard.is_pressed('r'):
         increase_servo_angle(10, MAX_ANGLE_FULL)
 
 
 def check_base_rotate():
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
         decrease_servo_angle(5, 36.5)
-        decrease_servo_angle(11, 36.5)
-
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(5, 167)
+
+
+def check_silver_base_rotate():
+    if keyboard.is_pressed('d'):
+        decrease_servo_angle(11, 36.5)
+    elif keyboard.is_pressed('f'):
         increase_servo_angle(11, 167)
 
 
@@ -245,6 +254,10 @@ if __name__ == '__main__':
         check_silver_tert_vert()
 
         check_silver_secondary_vert()
+
+        check_silver_primary_vert()
+
+        check_silver_base_rotate()
 
         if gpad.get_button(9):
             print("right stick pressed")
