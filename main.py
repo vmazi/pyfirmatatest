@@ -245,9 +245,9 @@ if __name__ == '__main__':
 
         check_print_angle()
 
-        check_move_to_stance()
-
-        check_chop_input()
+        # check_move_to_stance()
+        #
+        # check_chop_input()
 
         check_silver_claw_input()
 
