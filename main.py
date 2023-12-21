@@ -107,10 +107,10 @@ def increase_servo_angle(servo_num, max_angle):
 
 
 def check_claw_input():
-    if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
-        increase_servo_angle(0, 88)
-    elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
-        decrease_servo_angle(0, 40)
+    if keyboard.is_pressed('n'):
+        decrease_servo_angle(7, MIN_ANGLE)
+    elif keyboard.is_pressed('m'):
+        increase_servo_angle(7, MAX_ANGLE_FULL)
 
 
 def check_silver_claw_input():
@@ -128,10 +128,10 @@ def check_claw_rotate():
 
 
 def check_silver_claw_rotate():
-    if keyboard.is_pressed('n'):
-        decrease_servo_angle(7, MIN_ANGLE)
-    elif keyboard.is_pressed('m'):
-        increase_servo_angle(7, MAX_ANGLE_FULL)
+    if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
+        increase_servo_angle(0, 88)
+    elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
+        decrease_servo_angle(0, 40)
 
 
 def check_tert_vert():
