@@ -106,14 +106,14 @@ def increase_servo_angle(servo_num, max_angle):
                                                         servomotors[servo_num].servo)
 
 
-def check_claw_input():
+def check_silver_claw_rotate():
     if keyboard.is_pressed('n'):
-        decrease_servo_angle(7, MIN_ANGLE)
-    elif keyboard.is_pressed('m'):
         increase_servo_angle(7, MAX_ANGLE_FULL)
+    elif keyboard.is_pressed('m'):
+        decrease_servo_angle(7, MIN_ANGLE)
 
 
-def check_silver_claw_input():
+def check_silver_claw_grab():
     if keyboard.is_pressed('h'):
         increase_servo_angle(6, 88)
     elif keyboard.is_pressed('j'):
@@ -127,7 +127,7 @@ def check_claw_rotate():
         increase_servo_angle(1, MAX_ANGLE_FULL)
 
 
-def check_silver_claw_rotate():
+def check_claw_grab():
     if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
         increase_servo_angle(0, 88)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
@@ -143,51 +143,51 @@ def check_tert_vert():
 
 def check_silver_tert_vert():
     if gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT) > .5:
-        decrease_servo_angle(8, MIN_ANGLE)
-    elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
         increase_servo_angle(8, MAX_ANGLE_FULL)
+    elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
+        decrease_servo_angle(8, MIN_ANGLE)
 
 
 def check_secondary_vert():
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
-        decrease_servo_angle(3, MIN_ANGLE)
-    elif check_stick_down(horizontal_axis_l, vertical_axis_l):
         increase_servo_angle(3, MAX_ANGLE_FULL)
+    elif check_stick_down(horizontal_axis_l, vertical_axis_l):
+        decrease_servo_angle(3, MIN_ANGLE)
 
 
 def check_silver_secondary_vert():
     if gpad.get_button(4):
-        decrease_servo_angle(9, MIN_ANGLE)
-    elif gpad.get_button(5):
         increase_servo_angle(9, MAX_ANGLE_FULL)
+    elif gpad.get_button(5):
+        decrease_servo_angle(9, MIN_ANGLE)
 
 
 def check_primary_vert():
     if check_stick_down(horizontal_axis_r, vertical_axis_r):
-        decrease_servo_angle(4, MIN_ANGLE)
-    elif check_stick_up(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(4, MAX_ANGLE_FULL)
+    elif check_stick_up(horizontal_axis_r, vertical_axis_r):
+        decrease_servo_angle(4, MIN_ANGLE)
 
 
 def check_silver_primary_vert():
     if gpad.get_hat(0) == (0, -1):
-        decrease_servo_angle(10, MIN_ANGLE)
-    elif gpad.get_hat(0) == (0, 1):
         increase_servo_angle(10, MAX_ANGLE_FULL)
+    elif gpad.get_hat(0) == (0, 1):
+        decrease_servo_angle(10, MIN_ANGLE)
 
 
 def check_base_rotate():
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
-        decrease_servo_angle(5, 36.5)
-    elif check_stick_right(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(5, 167)
+    elif check_stick_right(horizontal_axis_r, vertical_axis_r):
+        decrease_servo_angle(5, 36.5)
 
 
 def check_silver_base_rotate():
     if gpad.get_hat(0) == (-1, 0):
-        decrease_servo_angle(11, 36.5)
-    elif gpad.get_hat(0) == (1, 0):
         increase_servo_angle(11, 167)
+    elif gpad.get_hat(0) == (1, 0):
+        decrease_servo_angle(11, 36.5)
 
 
 def check_move_to_stance():
@@ -231,7 +231,7 @@ if __name__ == '__main__':
         horizontal_axis_r = gpad.get_axis(2)
         vertical_axis_r = gpad.get_axis(3)
 
-        check_claw_input()
+        check_claw_grab()
 
         check_claw_rotate()
 
@@ -249,7 +249,7 @@ if __name__ == '__main__':
         #
         # check_chop_input()
 
-        check_silver_claw_input()
+        check_silver_claw_grab()
 
         check_silver_claw_rotate()
 
