@@ -1,3 +1,5 @@
+from time import sleep
+
 import pyfirmata
 
 import pygame
@@ -20,7 +22,7 @@ board = pyfirmata.Arduino('COM3')
 
 # # %% setup servo on pin 2
 # angle_servo1 = 10  # initial angle
-da = .25  # initial speed (degrees per keypress)
+da = .5  # initial speed (degrees per keypress)
 
 
 # servo1 = board.get_pin('d:2:s')  # pin to communicate to the servo with
@@ -192,10 +194,18 @@ def check_silver_base_rotate():
 
 def check_move_to_stance():
     if keyboard.is_pressed('s'):
-        servomotors[2].angle_servo = 42.5
-        move_servo(servomotors[2].servo, servomotors[2].angle_servo)
-        servomotors[4].angle_servo = 100.0
-        move_servo(servomotors[4].servo, servomotors[4].angle_servo)
+        move_servo_to_angle(6, 40.5)
+        move_servo_to_angle(7, 124.5)
+        move_servo_to_angle(8, 141.5)
+        move_servo_to_angle(9, 101.0)
+        move_servo_to_angle(10, 107.5)
+        sleep(.5)
+        move_servo_to_angle(11, 118.0)
+
+
+def move_servo_to_angle(servo_ind, angle_to_set):
+    servomotors[servo_ind].angle_servo = angle_to_set
+    move_servo(servomotors[servo_ind].servo, servomotors[servo_ind].angle_servo)
 
 
 def check_chop_input():
@@ -245,7 +255,7 @@ if __name__ == '__main__':
 
         check_print_angle()
 
-        # check_move_to_stance()
+        check_move_to_stance()
         #
         # check_chop_input()
 
