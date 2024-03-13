@@ -41,6 +41,7 @@ class Servo:
 servo_init_angle = [50, 33, 47, 130, 90, 104, 50, 33, 47, 80, 90, 87]
 
 servomotors = []
+
 for i in range(2, 14):
     servo_motor = Servo(servo_init_angle[i - 2], i)
     servo_motor.servo.write(servo_motor.angle_servo)
@@ -53,7 +54,7 @@ for i in range(0, pygame.joystick.get_count()):
     # initialize the appended joystick (-1 means last array item)
     joysticks[-1].init()
     # print a statement telling what the name of the controller is
-    print("Detected joystick " + joysticks[-1].get_name() + "'")
+    print('Detected joystick ' + joysticks[-1].get_name() + '')
 
 
 # set up a function that will tell the servo to move to a specific position when called
@@ -194,13 +195,39 @@ def check_silver_base_rotate():
 
 def check_move_to_stance():
     if keyboard.is_pressed('s'):
-        move_servo_to_angle(6, 40.5)
-        move_servo_to_angle(7, 124.5)
-        move_servo_to_angle(8, 141.5)
-        move_servo_to_angle(9, 101.0)
-        move_servo_to_angle(10, 107.5)
-        sleep(.5)
-        move_servo_to_angle(11, 118.0)
+        hold_pose = [{'ind': 6, 'angle': 40.5},
+                     {'ind': 7, 'angle': 124.5},
+                     {'ind': 8, 'angle': 141.5},
+                     {'ind': 9, 'angle': 101.0},
+                     {'ind': 10, 'angle': 107.5},
+                     {'ind': 11, 'lag': .5, 'angle': 118.0}]
+        move_arm_to_pos(hold_pose)
+
+
+def check_move_to_init():
+    if keyboard.is_pressed('r'):
+        hold_pose = [{'ind': 5, 'angle': 104},
+                     {'ind': 0, 'angle': 50},
+                     {'ind': 1, 'angle': 33},
+                     {'ind': 2, 'angle': 47},
+                     {'ind': 3, 'angle': 130},
+                     {'ind': 4, 'angle': 90}]
+        move_arm_to_pos(hold_pose)
+        hold_pose = [{'ind': 11, 'angle': 87},
+                     {'ind': 6, 'angle': 50},
+                     {'ind': 7, 'angle': 33},
+                     {'ind': 8, 'angle': 47},
+                     {'ind': 9, 'angle': 80},
+                     {'ind': 10, 'angle': 90}]
+        move_arm_to_pos(hold_pose)
+
+
+def move_arm_to_pos(desired_pose):
+    for increment in range(6):
+        if 'lag' in desired_pose[increment]:
+            sleep(desired_pose[increment].get('lag'))
+
+        move_servo_to_angle(desired_pose[increment].get('ind'), desired_pose[increment].get('angle'))
 
 
 def move_servo_to_angle(servo_ind, angle_to_set):
@@ -256,6 +283,8 @@ if __name__ == '__main__':
         check_print_angle()
 
         check_move_to_stance()
+
+        check_move_to_init()
         #
         # check_chop_input()
 
@@ -272,7 +301,7 @@ if __name__ == '__main__':
         check_silver_base_rotate()
 
         if gpad.get_button(9):
-            print("right stick pressed")
+            print('right stick pressed')
 
         if gpad.get_button(8):
-            print("left stick pressed")
+            print('left stick pressed')
