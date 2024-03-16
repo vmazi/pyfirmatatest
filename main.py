@@ -114,16 +114,16 @@ def check_silver_claw_grab():
 
 def check_silver_tert_vert(gpad):
     if gpad.get_button(4):
-        increase_servo_angle(8, MAX_ANGLE_FULL)
-    elif gpad.get_button(5):
         decrease_servo_angle(8, MIN_ANGLE)
+    elif gpad.get_button(5):
+        increase_servo_angle(8, MAX_ANGLE_FULL)
 
 
 def check_silver_secondary_vert(gpad):
     if gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT) > .5:
-        increase_servo_angle(9, MAX_ANGLE_FULL)
-    elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
         decrease_servo_angle(9, MIN_ANGLE)
+    elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
+        increase_servo_angle(9, MAX_ANGLE_FULL)
 
 
 def check_silver_primary_vert(gpad):
