@@ -7,10 +7,6 @@ import keyboard
 
 DEADZONE = .2
 
-pygame.init()
-joysticks = []
-clock = pygame.time.Clock()
-
 MIN_ANGLE = 10
 
 MAX_ANGLE_FULL = 180
@@ -25,13 +21,6 @@ board = pyfirmata.Arduino('COM3')
 da = .5  # initial speed (degrees per keypress)
 
 
-# servo1 = board.get_pin('d:2:s')  # pin to communicate to the servo with
-# servo1.write(angle_servo1)  # set servo to initial angle
-#
-# angle_servo2 = 10  # initial angle
-# servo2 = board.get_pin('d:3:s')  # pin to communicate to the servo with
-# servo2.write(angle_servo2)  # set servo to initial angle
-
 class Servo:
     def __init__(self, angle_servo, pin):
         self.angle_servo = angle_servo
@@ -42,19 +31,24 @@ servo_init_angle = [50, 33, 47, 130, 90, 104, 50, 33, 47, 80, 90, 87]
 
 servomotors = []
 
-for i in range(2, 14):
-    servo_motor = Servo(servo_init_angle[i - 2], i)
-    servo_motor.servo.write(servo_motor.angle_servo)
-    servomotors.append(servo_motor)
 
-# for al the connected joysticks
-for i in range(0, pygame.joystick.get_count()):
-    # create a Joystick object in our list
-    joysticks.append(pygame.joystick.Joystick(i))
-    # initialize the appended joystick (-1 means last array item)
-    joysticks[-1].init()
-    # print a statement telling what the name of the controller is
-    print('Detected joystick ' + joysticks[-1].get_name() + '')
+def setup_arm_control():
+    pygame.init()
+    joysticks = []
+
+    for i in range(2, 14):
+        servo_motor = Servo(servo_init_angle[i - 2], i)
+        servo_motor.servo.write(servo_motor.angle_servo)
+        servomotors.append(servo_motor)
+    # for al the connected joysticks
+    for i in range(0, pygame.joystick.get_count()):
+        # create a Joystick object in our list
+        joysticks.append(pygame.joystick.Joystick(i))
+        # initialize the appended joystick (-1 means last array item)
+        joysticks[-1].init()
+        # print a statement telling what the name of the controller is
+        print('Detected joystick ' + joysticks[-1].get_name() + '')
+    return joysticks
 
 
 # set up a function that will tell the servo to move to a specific position when called
@@ -94,11 +88,6 @@ def dec_serv_angle(angle_servo, inc, min_ang, servo):
     return angle_servo
 
 
-events = []
-# %% while loop
-gpad = joysticks[-1]
-
-
 def decrease_servo_angle(servo_num, min_angle):
     servomotors[servo_num].angle_servo = dec_serv_angle(servomotors[servo_num].angle_servo, da, min_angle,
                                                         servomotors[servo_num].servo)
@@ -123,42 +112,42 @@ def check_silver_claw_grab():
         decrease_servo_angle(6, 40)
 
 
-def check_silver_tert_vert():
+def check_silver_tert_vert(gpad):
     if gpad.get_button(4):
         increase_servo_angle(8, MAX_ANGLE_FULL)
     elif gpad.get_button(5):
         decrease_servo_angle(8, MIN_ANGLE)
 
 
-def check_silver_secondary_vert():
+def check_silver_secondary_vert(gpad):
     if gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT) > .5:
         increase_servo_angle(9, MAX_ANGLE_FULL)
     elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
         decrease_servo_angle(9, MIN_ANGLE)
 
 
-def check_silver_primary_vert():
+def check_silver_primary_vert(gpad):
     if gpad.get_hat(0) == (0, -1):
         increase_servo_angle(10, MAX_ANGLE_FULL)
     elif gpad.get_hat(0) == (0, 1):
         decrease_servo_angle(10, MIN_ANGLE)
 
 
-def check_silver_base_rotate():
+def check_silver_base_rotate(gpad):
     if gpad.get_hat(0) == (-1, 0):
         increase_servo_angle(11, 167)
     elif gpad.get_hat(0) == (1, 0):
         decrease_servo_angle(11, 36.5)
 
 
-def check_claw_rotate():
+def check_claw_rotate(gpad):
     if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
         decrease_servo_angle(1, MIN_ANGLE)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
         increase_servo_angle(1, MAX_ANGLE_FULL)
 
 
-def check_claw_grab():
+def check_claw_grab(gpad):
     if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
         increase_servo_angle(0, 88)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
@@ -204,8 +193,8 @@ def check_move_to_stance():
         move_arm_to_pos(hold_pose)
 
 
-def check_move_to_init():
-    if keyboard.is_pressed('r'):
+def check_move_to_init(gpad):
+    if gpad.get_button(7):
         hold_pose = [{'ind': 5, 'angle': 104},
                      {'ind': 0, 'angle': 50},
                      {'ind': 1, 'angle': 33},
@@ -243,16 +232,34 @@ def check_chop_input():
         move_servo(servomotors[4].servo, servomotors[4].angle_servo)
 
 
-def check_print_angle():
-    global i
-    if keyboard.is_pressed('a'):
+def check_print_angle(gpad):
+    if keyboard.is_pressed('p'):
         print(gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT))
         print(gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT))
-        for i in range(0, len(servomotors)):
-            print('servo:' + str(i) + ' has angle: ', str(servomotors[i].angle_servo))
+        for index in range(0, len(servomotors)):
+            print('servo:' + str(index) + ' has angle: ', str(servomotors[index].angle_servo))
+
+
+def check_move_to_tool_select(gpad):
+    if gpad.get_button(8):
+        tool_grab_pose = [{'ind': 6, 'angle': 40.5},
+                          {'ind': 7, 'angle': 124.5},
+                          {'ind': 8, 'angle': 141.5},
+                          {'ind': 9, 'angle': 101.0},
+                          {'ind': 10, 'angle': 107.5},
+                          {'ind': 11, 'lag': .5, 'angle': 118.0}]
+        move_arm_to_pos(tool_grab_pose)
 
 
 if __name__ == '__main__':
+
+    joysticks = setup_arm_control()
+    events = []
+    # %% while loop
+    gamepad = joysticks[-1]
+
+    clock = pygame.time.Clock()
+
     while True:
         clock.tick(120)
 
@@ -262,15 +269,15 @@ if __name__ == '__main__':
             for event in events:
                 print(event)
 
-        horizontal_axis_l = gpad.get_axis(0)
-        vertical_axis_l = gpad.get_axis(1)
+        horizontal_axis_l = gamepad.get_axis(0)
+        vertical_axis_l = gamepad.get_axis(1)
 
-        horizontal_axis_r = gpad.get_axis(2)
-        vertical_axis_r = gpad.get_axis(3)
+        horizontal_axis_r = gamepad.get_axis(2)
+        vertical_axis_r = gamepad.get_axis(3)
 
-        check_claw_grab()
+        check_claw_grab(gamepad)
 
-        check_claw_rotate()
+        check_claw_rotate(gamepad)
 
         check_tert_vert()
 
@@ -280,11 +287,11 @@ if __name__ == '__main__':
 
         check_base_rotate()
 
-        check_print_angle()
+        check_print_angle(gamepad)
 
         check_move_to_stance()
 
-        check_move_to_init()
+        check_move_to_init(gamepad)
         #
         # check_chop_input()
 
@@ -292,23 +299,15 @@ if __name__ == '__main__':
 
         check_silver_claw_rotate()
 
-        check_silver_tert_vert()
+        check_silver_tert_vert(gamepad)
 
-        check_silver_secondary_vert()
+        check_silver_secondary_vert(gamepad)
 
-        check_silver_primary_vert()
+        check_silver_primary_vert(gamepad)
 
-        check_silver_base_rotate()
+        check_silver_base_rotate(gamepad)
 
-        if gpad.get_button(9):
+        if gamepad.get_button(9):
             print('right stick pressed')
 
-        if gpad.get_button(8):
-            print('left stick pressed')
-            hold_pose = [{'ind': 6, 'angle': 40.5},
-                         {'ind': 7, 'angle': 124.5},
-                         {'ind': 8, 'angle': 141.5},
-                         {'ind': 9, 'angle': 101.0},
-                         {'ind': 10, 'angle': 107.5},
-                         {'ind': 11, 'lag': .5, 'angle': 118.0}]
-            move_arm_to_pos(hold_pose)
+        check_move_to_tool_select(gamepad)
