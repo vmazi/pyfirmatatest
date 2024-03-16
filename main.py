@@ -18,7 +18,7 @@ board = pyfirmata.Arduino('COM3')
 
 # # %% setup servo on pin 2
 # angle_servo1 = 10  # initial angle
-da = .5  # initial speed (degrees per keypress)
+degree_increment = .5  # initial speed (degrees per keypress)
 
 
 class Servo:
@@ -89,12 +89,12 @@ def dec_serv_angle(angle_servo, inc, min_ang, servo):
 
 
 def decrease_servo_angle(servo_num, min_angle):
-    servomotors[servo_num].angle_servo = dec_serv_angle(servomotors[servo_num].angle_servo, da, min_angle,
+    servomotors[servo_num].angle_servo = dec_serv_angle(servomotors[servo_num].angle_servo, degree_increment, min_angle,
                                                         servomotors[servo_num].servo)
 
 
 def increase_servo_angle(servo_num, max_angle):
-    servomotors[servo_num].angle_servo = inc_serv_angle(servomotors[servo_num].angle_servo, da, max_angle,
+    servomotors[servo_num].angle_servo = inc_serv_angle(servomotors[servo_num].angle_servo, degree_increment, max_angle,
                                                         servomotors[servo_num].servo)
 
 
@@ -154,28 +154,28 @@ def check_claw_grab(gpad):
         decrease_servo_angle(0, 40)
 
 
-def check_tert_vert():
+def check_tert_vert(horizontal_axis_l, vertical_axis_l):
     if check_stick_left(horizontal_axis_l, vertical_axis_l):
         decrease_servo_angle(2, MIN_ANGLE)
     elif check_stick_right(horizontal_axis_l, vertical_axis_l):
         increase_servo_angle(2, MAX_ANGLE_FULL)
 
 
-def check_secondary_vert():
+def check_secondary_vert(horizontal_axis_l, vertical_axis_l):
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
         increase_servo_angle(3, MAX_ANGLE_FULL)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
         decrease_servo_angle(3, MIN_ANGLE)
 
 
-def check_primary_vert():
+def check_primary_vert(horizontal_axis_r, vertical_axis_r):
     if check_stick_down(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(4, MAX_ANGLE_FULL)
     elif check_stick_up(horizontal_axis_r, vertical_axis_r):
         decrease_servo_angle(4, MIN_ANGLE)
 
 
-def check_base_rotate():
+def check_base_rotate(horizontal_axis_r, vertical_axis_r):
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(5, 167)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
@@ -251,8 +251,7 @@ def check_move_to_tool_select(gpad):
         move_arm_to_pos(tool_grab_pose)
 
 
-if __name__ == '__main__':
-
+def main():
     joysticks = setup_arm_control()
     events = []
     # %% while loop
@@ -279,13 +278,13 @@ if __name__ == '__main__':
 
         check_claw_rotate(gamepad)
 
-        check_tert_vert()
+        check_tert_vert(horizontal_axis_l, vertical_axis_l)
 
-        check_secondary_vert()
+        check_secondary_vert(horizontal_axis_l, vertical_axis_l)
 
-        check_primary_vert()
+        check_primary_vert(horizontal_axis_r, vertical_axis_r)
 
-        check_base_rotate()
+        check_base_rotate(horizontal_axis_r, vertical_axis_r)
 
         check_print_angle(gamepad)
 
@@ -311,3 +310,7 @@ if __name__ == '__main__':
             print('right stick pressed')
 
         check_move_to_tool_select(gamepad)
+
+
+if __name__ == "__main__":
+    main()
