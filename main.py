@@ -123,6 +123,34 @@ def check_silver_claw_grab():
         decrease_servo_angle(6, 40)
 
 
+def check_silver_tert_vert():
+    if gpad.get_button(4):
+        increase_servo_angle(8, MAX_ANGLE_FULL)
+    elif gpad.get_button(5):
+        decrease_servo_angle(8, MIN_ANGLE)
+
+
+def check_silver_secondary_vert():
+    if gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT) > .5:
+        increase_servo_angle(9, MAX_ANGLE_FULL)
+    elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
+        decrease_servo_angle(9, MIN_ANGLE)
+
+
+def check_silver_primary_vert():
+    if gpad.get_hat(0) == (0, -1):
+        increase_servo_angle(10, MAX_ANGLE_FULL)
+    elif gpad.get_hat(0) == (0, 1):
+        decrease_servo_angle(10, MIN_ANGLE)
+
+
+def check_silver_base_rotate():
+    if gpad.get_hat(0) == (-1, 0):
+        increase_servo_angle(11, 167)
+    elif gpad.get_hat(0) == (1, 0):
+        decrease_servo_angle(11, 36.5)
+
+
 def check_claw_rotate():
     if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
         decrease_servo_angle(1, MIN_ANGLE)
@@ -144,25 +172,11 @@ def check_tert_vert():
         increase_servo_angle(2, MAX_ANGLE_FULL)
 
 
-def check_silver_tert_vert():
-    if gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT) > .5:
-        increase_servo_angle(8, MAX_ANGLE_FULL)
-    elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
-        decrease_servo_angle(8, MIN_ANGLE)
-
-
 def check_secondary_vert():
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
         increase_servo_angle(3, MAX_ANGLE_FULL)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
         decrease_servo_angle(3, MIN_ANGLE)
-
-
-def check_silver_secondary_vert():
-    if gpad.get_button(4):
-        increase_servo_angle(9, MAX_ANGLE_FULL)
-    elif gpad.get_button(5):
-        decrease_servo_angle(9, MIN_ANGLE)
 
 
 def check_primary_vert():
@@ -172,25 +186,11 @@ def check_primary_vert():
         decrease_servo_angle(4, MIN_ANGLE)
 
 
-def check_silver_primary_vert():
-    if gpad.get_hat(0) == (0, -1):
-        increase_servo_angle(10, MAX_ANGLE_FULL)
-    elif gpad.get_hat(0) == (0, 1):
-        decrease_servo_angle(10, MIN_ANGLE)
-
-
 def check_base_rotate():
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
         increase_servo_angle(5, 167)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
         decrease_servo_angle(5, 36.5)
-
-
-def check_silver_base_rotate():
-    if gpad.get_hat(0) == (-1, 0):
-        increase_servo_angle(11, 167)
-    elif gpad.get_hat(0) == (1, 0):
-        decrease_servo_angle(11, 36.5)
 
 
 def check_move_to_stance():
@@ -305,3 +305,10 @@ if __name__ == '__main__':
 
         if gpad.get_button(8):
             print('left stick pressed')
+            hold_pose = [{'ind': 6, 'angle': 40.5},
+                         {'ind': 7, 'angle': 124.5},
+                         {'ind': 8, 'angle': 141.5},
+                         {'ind': 9, 'angle': 101.0},
+                         {'ind': 10, 'angle': 107.5},
+                         {'ind': 11, 'lag': .5, 'angle': 118.0}]
+            move_arm_to_pos(hold_pose)
