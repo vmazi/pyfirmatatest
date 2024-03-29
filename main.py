@@ -1,11 +1,9 @@
+from enum import Enum
 from time import sleep
 
-import pyfirmata
-
-import pygame
 import keyboard
-
-from enum import Enum
+import pyfirmata
+import pygame
 
 
 class ReadInput(Enum):
@@ -141,19 +139,15 @@ def increase_servo_angle(servo_num, max_angle):
 
 def check_silver_claw_grab(buffer):
     if keyboard.is_pressed('h'):
-
         buffer.append(ReadInput.SILVER_CLAW_GRAB_INC)
     elif keyboard.is_pressed('j'):
-
         buffer.append(ReadInput.SILVER_CLAW_GRAB_DEC)
 
 
 def check_silver_claw_rotate(buffer):
     if keyboard.is_pressed('n'):
-
         buffer.append(ReadInput.SILVER_CLAW_ROT_INC)
     elif keyboard.is_pressed('m'):
-
         buffer.append(ReadInput.SILVER_CLAW_ROT_DEC)
 
 
@@ -162,34 +156,27 @@ def check_silver_tert_vert(gpad, buffer):
 
         buffer.append(ReadInput.SILVER_TERT_VERT_DEC)
     elif gpad.get_button(5):
-
         buffer.append(ReadInput.SILVER_TERT_VERT_INC)
 
 
 def check_silver_secondary_vert(gpad, buffer):
     if gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT) > .5:
-
         buffer.append(ReadInput.SILVER_SEC_VERT_DEC)
     elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
-
         buffer.append(ReadInput.SILVER_SEC_VERT_INC)
 
 
 def check_silver_primary_vert(gpad, buffer):
     if gpad.get_hat(0) == (0, -1):
-
         buffer.append(ReadInput.SILVER_PRI_VERT_INC)
     elif gpad.get_hat(0) == (0, 1):
-
         buffer.append(ReadInput.SILVER_PRI_VERT_DEC)
 
 
 def check_silver_base_rotate(gpad, buffer):
     if gpad.get_hat(0) == (-1, 0):
-
         buffer.append(ReadInput.SILVER_BASE_ROT_INC)
     elif gpad.get_hat(0) == (1, 0):
-
         buffer.append(ReadInput.SILVER_BASE_ROT_DEC)
 
 
@@ -202,28 +189,22 @@ def check_claw_grab(gpad, buffer):
 
 def check_claw_rotate(gpad, buffer):
     if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
-
         buffer.append(ReadInput.BLACK_CLAW_ROT_DEC)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
-
         buffer.append(ReadInput.BLACK_CLAW_ROT_INC)
 
 
 def check_tert_vert(horizontal_axis_l, vertical_axis_l, buffer):
     if check_stick_left(horizontal_axis_l, vertical_axis_l):
-
         buffer.append(ReadInput.BLACK_TERT_VERT_DEC)
     elif check_stick_right(horizontal_axis_l, vertical_axis_l):
-
         buffer.append(ReadInput.BLACK_TERT_VERT_INC)
 
 
 def check_secondary_vert(horizontal_axis_l, vertical_axis_l, buffer):
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
-
         buffer.append(ReadInput.BLACK_SEC_VERT_INC)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
-
         buffer.append(ReadInput.BLACK_SEC_VERT_DEC)
 
 
@@ -231,7 +212,6 @@ def check_primary_vert(horizontal_axis_r, vertical_axis_r, buffer):
     if check_stick_down(horizontal_axis_r, vertical_axis_r):
         buffer.append(ReadInput.BLACK_PRI_VERT_INC)
     elif check_stick_up(horizontal_axis_r, vertical_axis_r):
-
         buffer.append(ReadInput.BLACK_PRI_VERT_DEC)
 
 
@@ -239,7 +219,6 @@ def check_base_rotate(horizontal_axis_r, vertical_axis_r, buffer):
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
         buffer.append(ReadInput.BLACK_BASE_ROT_INC)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
-
         buffer.append(ReadInput.BLACK_BASE_ROT_DEC)
 
 
@@ -333,30 +312,18 @@ def execute_command(input_command):
 
 def check_move_to_stance():
     if keyboard.is_pressed('s'):
-        hold_pose = [{'ind': 6, 'angle': 40.5},
-                     {'ind': 7, 'angle': 124.5},
-                     {'ind': 8, 'angle': 141.5},
-                     {'ind': 9, 'angle': 101.0},
-                     {'ind': 10, 'angle': 107.5},
-                     {'ind': 11, 'lag': .5, 'angle': 118.0}]
+        hold_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
+                     {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5}, {'ind': 11, 'lag': .5, 'angle': 118.0}]
         move_arm_to_pos(hold_pose)
 
 
 def check_move_to_init(gpad):
     if gpad.get_button(7):
-        hold_pose = [{'ind': 5, 'angle': 104},
-                     {'ind': 0, 'angle': 50},
-                     {'ind': 1, 'angle': 33},
-                     {'ind': 2, 'angle': 47},
-                     {'ind': 3, 'angle': 130},
-                     {'ind': 4, 'angle': 90}]
+        hold_pose = [{'ind': 5, 'angle': 104}, {'ind': 0, 'angle': 50}, {'ind': 1, 'angle': 33},
+                     {'ind': 2, 'angle': 47}, {'ind': 3, 'angle': 130}, {'ind': 4, 'angle': 90}]
         move_arm_to_pos(hold_pose)
-        hold_pose = [{'ind': 11, 'angle': 87},
-                     {'ind': 6, 'angle': 50},
-                     {'ind': 7, 'angle': 33},
-                     {'ind': 8, 'angle': 47},
-                     {'ind': 9, 'angle': 80},
-                     {'ind': 10, 'angle': 90}]
+        hold_pose = [{'ind': 11, 'angle': 87}, {'ind': 6, 'angle': 50}, {'ind': 7, 'angle': 33},
+                     {'ind': 8, 'angle': 47}, {'ind': 9, 'angle': 80}, {'ind': 10, 'angle': 90}]
         move_arm_to_pos(hold_pose)
 
 
@@ -391,11 +358,8 @@ def check_print_angle(gpad):
 
 def check_move_to_tool_select(gpad):
     if gpad.get_button(8):
-        tool_grab_pose = [{'ind': 6, 'angle': 40.5},
-                          {'ind': 7, 'angle': 124.5},
-                          {'ind': 8, 'angle': 141.5},
-                          {'ind': 9, 'angle': 101.0},
-                          {'ind': 10, 'angle': 107.5},
+        tool_grab_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
+                          {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5},
                           {'ind': 11, 'lag': .5, 'angle': 118.0}]
         move_arm_to_pos(tool_grab_pose)
 
