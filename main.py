@@ -345,6 +345,10 @@ def check_chop_input():
         move_servo(servomotors[4].servo, servomotors[4].angle_servo)
 
 
+def check_record():
+    return keyboard.is_pressed('r')
+
+
 def check_print_angle(gpad):
     if keyboard.is_pressed('p'):
         print(gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT))
@@ -370,7 +374,7 @@ def main():
     clock = pygame.time.Clock()
     record_to_buffer = False
 
-    buffer = []
+    recorded_buffer = []
     while True:
         clock.tick(120)
 
@@ -383,6 +387,8 @@ def main():
         if gamepad.get_button(9):
             print('right stick pressed')
 
+        record_to_buffer = check_record()
+
         check_move_to_tool_select(gamepad)
         check_print_angle(gamepad)
         check_move_to_stance()
@@ -392,6 +398,9 @@ def main():
 
         for command in command_buffer:
             execute_command(command)
+
+        if record_to_buffer:
+            recorded_buffer.append(command_buffer)
 
 
 if __name__ == "__main__":
