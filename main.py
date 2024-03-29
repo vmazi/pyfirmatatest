@@ -5,10 +5,10 @@ import pyfirmata
 import pygame
 import keyboard
 
-import enum
+from enum import Enum
 
 
-class ReadInput(enum):
+class ReadInput(Enum):
     SILVER_CLAW_ROT_INC = "SILVER_CLAW_ROT_INC"
     SILVER_CLAW_ROT_DEC = "SILVER_CLAW_ROT_DEC"
 
