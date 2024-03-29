@@ -5,6 +5,47 @@ import pyfirmata
 import pygame
 import keyboard
 
+import enum
+
+
+class ReadInput(enum):
+    SILVER_CLAW_ROT_INC = "SILVER_CLAW_ROT_INC"
+    SILVER_CLAW_ROT_DEC = "SILVER_CLAW_ROT_DEC"
+
+    SILVER_CLAW_GRAB_INC = "SILVER_CLAW_GRAB_INC"
+    SILVER_CLAW_GRAB_DEC = "SILVER_CLAW_GRAB_DEC"
+
+    SILVER_TERT_VERT_DEC = "SILVER_TERT_VERT_DEC"
+    SILVER_TERT_VERT_INC = "SILVER_TERT_VERT_INC"
+
+    SILVER_SEC_VERT_DEC = "SILVER_SEC_VERT_DEC"
+    SILVER_SEC_VERT_INC = "SILVER_SEC_VERT_INC"
+
+    SILVER_PRI_VERT_INC = "SILVER_PRI_VERT_INC"
+    SILVER_PRI_VERT_DEC = "SILVER_PRI_VERT_DEC"
+
+    SILVER_BASE_ROT_INC = "SILVER_BASE_ROT_INC"
+    SILVER_BASE_ROT_DEC = "SILVER_BASE_ROT_DEC"
+
+    BLACK_CLAW_ROT_DEC = "BLACK_CLAW_ROT_DEC"
+    BLACK_CLAW_ROT_INC = "BLACK_CLAW_ROT_INC"
+
+    BLACK_CLAW_GRAB_INC = "BLACK_CLAW_GRAB_INC"
+    BLACK_CLAW_GRAB_DEC = "BLACK_CLAW_GRAB_DEC"
+
+    BLACK_TERT_VERT_INC = "BLACK_TERT_VERT_INC"
+    BLACK_TERT_VERT_DEC = "BLACK_TERT_VERT_DEC"
+
+    BLACK_SEC_VERT_INC = "BLACK_SEC_VERT_INC"
+    BLACK_SEC_VERT_DEC = "BLACK_SEC_VERT_DEC"
+
+    BLACK_PRI_VERT_INC = "BLACK_PRI_VERT_INC"
+    BLACK_PRI_VERT_DEC = "BLACK_PRI_VERT_DEC"
+
+    BLACK_BASE_ROT_INC = "BLACK_BASE_ROT_INC"
+    BLACK_BASE_ROT_DEC = "BLACK_BASE_ROT_DEC"
+
+
 DEADZONE = .2
 
 MIN_ANGLE = 10
@@ -98,88 +139,196 @@ def increase_servo_angle(servo_num, max_angle):
                                                         servomotors[servo_num].servo)
 
 
-def check_silver_claw_rotate():
-    if keyboard.is_pressed('n'):
-        increase_servo_angle(7, MAX_ANGLE_FULL)
-    elif keyboard.is_pressed('m'):
-        decrease_servo_angle(7, MIN_ANGLE)
-
-
-def check_silver_claw_grab():
+def check_silver_claw_grab(buffer):
     if keyboard.is_pressed('h'):
-        increase_servo_angle(6, 88)
+
+        buffer.append(ReadInput.SILVER_CLAW_GRAB_INC)
     elif keyboard.is_pressed('j'):
-        decrease_servo_angle(6, 40)
+
+        buffer.append(ReadInput.SILVER_CLAW_GRAB_DEC)
 
 
-def check_silver_tert_vert(gpad):
+def check_silver_claw_rotate(buffer):
+    if keyboard.is_pressed('n'):
+
+        buffer.append(ReadInput.SILVER_CLAW_ROT_INC)
+    elif keyboard.is_pressed('m'):
+
+        buffer.append(ReadInput.SILVER_CLAW_ROT_DEC)
+
+
+def check_silver_tert_vert(gpad, buffer):
     if gpad.get_button(4):
-        decrease_servo_angle(8, MIN_ANGLE)
+
+        buffer.append(ReadInput.SILVER_TERT_VERT_DEC)
     elif gpad.get_button(5):
-        increase_servo_angle(8, MAX_ANGLE_FULL)
+
+        buffer.append(ReadInput.SILVER_TERT_VERT_INC)
 
 
-def check_silver_secondary_vert(gpad):
+def check_silver_secondary_vert(gpad, buffer):
     if gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT) > .5:
-        decrease_servo_angle(9, MIN_ANGLE)
+
+        buffer.append(ReadInput.SILVER_SEC_VERT_DEC)
     elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
-        increase_servo_angle(9, MAX_ANGLE_FULL)
+
+        buffer.append(ReadInput.SILVER_SEC_VERT_INC)
 
 
-def check_silver_primary_vert(gpad):
+def check_silver_primary_vert(gpad, buffer):
     if gpad.get_hat(0) == (0, -1):
-        increase_servo_angle(10, MAX_ANGLE_FULL)
+
+        buffer.append(ReadInput.SILVER_PRI_VERT_INC)
     elif gpad.get_hat(0) == (0, 1):
-        decrease_servo_angle(10, MIN_ANGLE)
+
+        buffer.append(ReadInput.SILVER_PRI_VERT_DEC)
 
 
-def check_silver_base_rotate(gpad):
+def check_silver_base_rotate(gpad, buffer):
     if gpad.get_hat(0) == (-1, 0):
-        increase_servo_angle(11, 167)
+
+        buffer.append(ReadInput.SILVER_BASE_ROT_INC)
     elif gpad.get_hat(0) == (1, 0):
-        decrease_servo_angle(11, 36.5)
+
+        buffer.append(ReadInput.SILVER_BASE_ROT_DEC)
 
 
-def check_claw_rotate(gpad):
-    if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
-        decrease_servo_angle(1, MIN_ANGLE)
-    elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
-        increase_servo_angle(1, MAX_ANGLE_FULL)
-
-
-def check_claw_grab(gpad):
+def check_claw_grab(gpad, buffer):
     if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
-        increase_servo_angle(0, 88)
+        buffer.append(ReadInput.BLACK_CLAW_GRAB_INC)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
-        decrease_servo_angle(0, 40)
+        buffer.append(ReadInput.BLACK_CLAW_GRAB_DEC)
 
 
-def check_tert_vert(horizontal_axis_l, vertical_axis_l):
+def check_claw_rotate(gpad, buffer):
+    if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
+
+        buffer.append(ReadInput.BLACK_CLAW_ROT_DEC)
+    elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
+
+        buffer.append(ReadInput.BLACK_CLAW_ROT_INC)
+
+
+def check_tert_vert(horizontal_axis_l, vertical_axis_l, buffer):
     if check_stick_left(horizontal_axis_l, vertical_axis_l):
-        decrease_servo_angle(2, MIN_ANGLE)
+
+        buffer.append(ReadInput.BLACK_TERT_VERT_DEC)
     elif check_stick_right(horizontal_axis_l, vertical_axis_l):
-        increase_servo_angle(2, MAX_ANGLE_FULL)
+
+        buffer.append(ReadInput.BLACK_TERT_VERT_INC)
 
 
-def check_secondary_vert(horizontal_axis_l, vertical_axis_l):
+def check_secondary_vert(horizontal_axis_l, vertical_axis_l, buffer):
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
-        increase_servo_angle(3, MAX_ANGLE_FULL)
+
+        buffer.append(ReadInput.BLACK_SEC_VERT_INC)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
-        decrease_servo_angle(3, MIN_ANGLE)
+
+        buffer.append(ReadInput.BLACK_SEC_VERT_DEC)
 
 
-def check_primary_vert(horizontal_axis_r, vertical_axis_r):
+def check_primary_vert(horizontal_axis_r, vertical_axis_r, buffer):
     if check_stick_down(horizontal_axis_r, vertical_axis_r):
-        increase_servo_angle(4, MAX_ANGLE_FULL)
+        buffer.append(ReadInput.BLACK_PRI_VERT_INC)
     elif check_stick_up(horizontal_axis_r, vertical_axis_r):
-        decrease_servo_angle(4, MIN_ANGLE)
+
+        buffer.append(ReadInput.BLACK_PRI_VERT_DEC)
 
 
-def check_base_rotate(horizontal_axis_r, vertical_axis_r):
+def check_base_rotate(horizontal_axis_r, vertical_axis_r, buffer):
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
-        increase_servo_angle(5, 167)
+        buffer.append(ReadInput.BLACK_BASE_ROT_INC)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
-        decrease_servo_angle(5, 36.5)
+
+        buffer.append(ReadInput.BLACK_BASE_ROT_DEC)
+
+
+def generate_commands(gamepad):
+    command_buffer = []
+
+    horizontal_axis_l = gamepad.get_axis(0)
+    vertical_axis_l = gamepad.get_axis(1)
+
+    horizontal_axis_r = gamepad.get_axis(2)
+    vertical_axis_r = gamepad.get_axis(3)
+
+    check_claw_grab(gamepad, command_buffer)
+
+    check_claw_rotate(gamepad, command_buffer)
+
+    check_tert_vert(horizontal_axis_l, vertical_axis_l, command_buffer)
+
+    check_secondary_vert(horizontal_axis_l, vertical_axis_l, command_buffer)
+
+    check_primary_vert(horizontal_axis_r, vertical_axis_r, command_buffer)
+
+    check_base_rotate(horizontal_axis_r, vertical_axis_r, command_buffer)
+
+    check_silver_claw_grab(command_buffer)
+
+    check_silver_claw_rotate(command_buffer)
+
+    check_silver_tert_vert(gamepad, command_buffer)
+
+    check_silver_secondary_vert(gamepad, command_buffer)
+
+    check_silver_primary_vert(gamepad, command_buffer)
+
+    check_silver_base_rotate(gamepad, command_buffer)
+    return command_buffer
+
+
+def execute_command(input_command):
+    match input_command:
+        case ReadInput.BLACK_BASE_ROT_INC:
+            increase_servo_angle(5, 167)
+        case ReadInput.BLACK_BASE_ROT_DEC:
+            decrease_servo_angle(5, 36.5)
+        case ReadInput.BLACK_PRI_VERT_INC:
+            increase_servo_angle(4, MAX_ANGLE_FULL)
+        case ReadInput.BLACK_PRI_VERT_DEC:
+            decrease_servo_angle(4, MIN_ANGLE)
+        case ReadInput.BLACK_SEC_VERT_INC:
+            increase_servo_angle(3, MAX_ANGLE_FULL)
+        case ReadInput.BLACK_SEC_VERT_DEC:
+            decrease_servo_angle(3, MIN_ANGLE)
+        case ReadInput.BLACK_TERT_VERT_INC:
+            increase_servo_angle(2, MAX_ANGLE_FULL)
+        case ReadInput.BLACK_TERT_VERT_DEC:
+            decrease_servo_angle(2, MIN_ANGLE)
+        case ReadInput.BLACK_CLAW_ROT_INC:
+            increase_servo_angle(1, MAX_ANGLE_FULL)
+        case ReadInput.BLACK_CLAW_ROT_DEC:
+            decrease_servo_angle(1, MIN_ANGLE)
+        case ReadInput.BLACK_CLAW_GRAB_INC:
+            increase_servo_angle(0, 88)
+        case ReadInput.BLACK_CLAW_GRAB_DEC:
+            decrease_servo_angle(0, 40)
+
+        case ReadInput.SILVER_BASE_ROT_INC:
+            increase_servo_angle(11, 167)
+        case ReadInput.SILVER_BASE_ROT_DEC:
+            decrease_servo_angle(11, 36.5)
+        case ReadInput.SILVER_PRI_VERT_INC:
+            increase_servo_angle(10, MAX_ANGLE_FULL)
+        case ReadInput.SILVER_PRI_VERT_DEC:
+            decrease_servo_angle(10, MIN_ANGLE)
+        case ReadInput.SILVER_SEC_VERT_INC:
+            increase_servo_angle(9, MAX_ANGLE_FULL)
+        case ReadInput.SILVER_SEC_VERT_DEC:
+            decrease_servo_angle(9, MIN_ANGLE)
+        case ReadInput.SILVER_TERT_VERT_INC:
+            increase_servo_angle(8, MAX_ANGLE_FULL)
+        case ReadInput.SILVER_TERT_VERT_DEC:
+            decrease_servo_angle(8, MIN_ANGLE)
+        case ReadInput.SILVER_CLAW_ROT_INC:
+            increase_servo_angle(7, MAX_ANGLE_FULL)
+        case ReadInput.SILVER_CLAW_ROT_DEC:
+            decrease_servo_angle(7, MIN_ANGLE)
+        case ReadInput.SILVER_CLAW_GRAB_INC:
+            increase_servo_angle(6, 88)
+        case ReadInput.SILVER_CLAW_GRAB_DEC:
+            decrease_servo_angle(6, 40)
 
 
 def check_move_to_stance():
@@ -258,7 +407,9 @@ def main():
     gamepad = joysticks[-1]
 
     clock = pygame.time.Clock()
+    record_to_buffer = False
 
+    buffer = []
     while True:
         clock.tick(120)
 
@@ -268,48 +419,18 @@ def main():
             for event in events:
                 print(event)
 
-        horizontal_axis_l = gamepad.get_axis(0)
-        vertical_axis_l = gamepad.get_axis(1)
-
-        horizontal_axis_r = gamepad.get_axis(2)
-        vertical_axis_r = gamepad.get_axis(3)
-
-        check_claw_grab(gamepad)
-
-        check_claw_rotate(gamepad)
-
-        check_tert_vert(horizontal_axis_l, vertical_axis_l)
-
-        check_secondary_vert(horizontal_axis_l, vertical_axis_l)
-
-        check_primary_vert(horizontal_axis_r, vertical_axis_r)
-
-        check_base_rotate(horizontal_axis_r, vertical_axis_r)
-
-        check_print_angle(gamepad)
-
-        check_move_to_stance()
-
-        check_move_to_init(gamepad)
-        #
-        # check_chop_input()
-
-        check_silver_claw_grab()
-
-        check_silver_claw_rotate()
-
-        check_silver_tert_vert(gamepad)
-
-        check_silver_secondary_vert(gamepad)
-
-        check_silver_primary_vert(gamepad)
-
-        check_silver_base_rotate(gamepad)
-
         if gamepad.get_button(9):
             print('right stick pressed')
 
         check_move_to_tool_select(gamepad)
+        check_print_angle(gamepad)
+        check_move_to_stance()
+        check_move_to_init(gamepad)
+
+        command_buffer = generate_commands(gamepad)
+
+        for command in command_buffer:
+            execute_command(command)
 
 
 if __name__ == "__main__":
