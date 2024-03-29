@@ -55,8 +55,6 @@ MAX_ANGLE_HALF = 110
 # set up arduino board
 board = pyfirmata.Arduino('COM3')
 
-# # %% setup servo on pin 2
-# angle_servo1 = 10  # initial angle
 degree_increment = .5  # initial speed (degrees per keypress)
 
 
@@ -153,7 +151,6 @@ def check_silver_claw_rotate(buffer):
 
 def check_silver_tert_vert(gpad, buffer):
     if gpad.get_button(4):
-
         buffer.append(ReadInput.SILVER_TERT_VERT_DEC)
     elif gpad.get_button(5):
         buffer.append(ReadInput.SILVER_TERT_VERT_INC)
