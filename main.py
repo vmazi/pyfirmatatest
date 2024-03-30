@@ -348,18 +348,26 @@ def check_chop_input():
 def check_replay(currently_replaying):
     if currently_replaying:
         return currently_replaying
-    return keyboard.is_pressed('e')
+    if keyboard.is_pressed('e'):
+        print("replaying!")
+        return True
 
 
 def check_record(currently_recording):
     if currently_recording:
         return currently_recording
-    return keyboard.is_pressed('r')
+    if keyboard.is_pressed('r'):
+        print("recording!")
+        return True
 
 
 def check_end_record(currently_recording):
     if currently_recording:
-        return keyboard.is_pressed('t')
+        if keyboard.is_pressed('t'):
+            print("done record")
+            return False
+        else:
+            return True
 
 
 def check_print_angle(gpad):
@@ -394,8 +402,8 @@ def main():
         new_events = pygame.event.get()
         if len(new_events) != 0:
             events = new_events
-            for event in events:
-                print(event)
+            # for event in events:
+            #     print(event)
 
         if gamepad.get_button(9):
             print('right stick pressed')
@@ -409,16 +417,21 @@ def main():
         check_print_angle(gamepad)
         check_move_to_stance()
         check_move_to_init(gamepad)
-        if not replay_buffer:
+
+        if replay_buffer:
+            if len(recorded_buffer) == 0:
+                replay_buffer = False
+                print("finished replaying!")
+            else:
+                replay_commands = recorded_buffer.pop(0)
+                for command in replay_commands:
+                    execute_command(command)
+        else:
             command_buffer = generate_commands(gamepad)
             for command in command_buffer:
                 execute_command(command)
             if record_to_buffer:
                 recorded_buffer.append(command_buffer)
-        else:
-            replay_commands = recorded_buffer.pop(0)
-            for command in replay_commands:
-                execute_command(command)
 
 
 if __name__ == "__main__":
