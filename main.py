@@ -345,8 +345,21 @@ def check_chop_input():
         move_servo(servomotors[4].servo, servomotors[4].angle_servo)
 
 
-def check_record():
+def check_replay(currently_replaying):
+    if currently_replaying:
+        return currently_replaying
+    return keyboard.is_pressed('e')
+
+
+def check_record(currently_recording):
+    if currently_recording:
+        return currently_recording
     return keyboard.is_pressed('r')
+
+
+def check_end_record(currently_recording):
+    if currently_recording:
+        return keyboard.is_pressed('t')
 
 
 def check_print_angle(gpad):
@@ -373,7 +386,7 @@ def main():
 
     clock = pygame.time.Clock()
     record_to_buffer = False
-
+    replay_buffer = False
     recorded_buffer = []
     while True:
         clock.tick(120)
@@ -387,20 +400,25 @@ def main():
         if gamepad.get_button(9):
             print('right stick pressed')
 
-        record_to_buffer = check_record()
+        record_to_buffer = check_record(record_to_buffer)
+        record_to_buffer = check_end_record(record_to_buffer)
+
+        replay_buffer = check_replay(replay_buffer)
 
         check_move_to_tool_select(gamepad)
         check_print_angle(gamepad)
         check_move_to_stance()
         check_move_to_init(gamepad)
-
-        command_buffer = generate_commands(gamepad)
-
-        for command in command_buffer:
-            execute_command(command)
-
-        if record_to_buffer:
-            recorded_buffer.append(command_buffer)
+        if not replay_buffer:
+            command_buffer = generate_commands(gamepad)
+            for command in command_buffer:
+                execute_command(command)
+            if record_to_buffer:
+                recorded_buffer.append(command_buffer)
+        else:
+            replay_commands = recorded_buffer.pop(0)
+            for command in replay_commands:
+                execute_command(command)
 
 
 if __name__ == "__main__":
