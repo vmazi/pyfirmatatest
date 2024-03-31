@@ -43,6 +43,8 @@ class ReadInput(Enum):
     BLACK_BASE_ROT_INC = "BLACK_BASE_ROT_INC"
     BLACK_BASE_ROT_DEC = "BLACK_BASE_ROT_DEC"
 
+    MACRO_SELECT_TOOL = "MACRO_SELECT_TOOL"
+
 
 DEADZONE = .2
 
@@ -251,10 +253,12 @@ def generate_commands(gamepad):
     check_silver_primary_vert(gamepad, command_buffer)
 
     check_silver_base_rotate(gamepad, command_buffer)
+
+    check_move_to_tool_select(gamepad, command_buffer)
     return command_buffer
 
 
-def execute_command(input_command):
+def execute_black_arm_command(input_command):
     match input_command:
         case ReadInput.BLACK_BASE_ROT_INC:
             increase_servo_angle(5, 167)
@@ -281,6 +285,9 @@ def execute_command(input_command):
         case ReadInput.BLACK_CLAW_GRAB_DEC:
             decrease_servo_angle(0, 40)
 
+
+def execute_silver_arm_command(input_command):
+    match input_command:
         case ReadInput.SILVER_BASE_ROT_INC:
             increase_servo_angle(11, 167)
         case ReadInput.SILVER_BASE_ROT_DEC:
@@ -305,6 +312,24 @@ def execute_command(input_command):
             increase_servo_angle(6, 88)
         case ReadInput.SILVER_CLAW_GRAB_DEC:
             decrease_servo_angle(6, 40)
+
+
+def execute_macro_command(input_command):
+    match input_command:
+        case ReadInput.MACRO_SELECT_TOOL:
+            tool_grab_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
+                              {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5},
+                              {'ind': 11, 'lag': .5, 'angle': 118.0}]
+            move_arm_to_pos(tool_grab_pose)
+
+
+def execute_command(input_command):
+    if input_command.value.startswith("BLACK"):
+        execute_black_arm_command(input_command)
+    elif input_command.value.startswith("SILVER"):
+        execute_silver_arm_command(input_command)
+    else:
+        execute_macro_command(input_command)
 
 
 def check_move_to_stance():
@@ -378,12 +403,9 @@ def check_print_angle(gpad):
             print('servo:' + str(index) + ' has angle: ', str(servomotors[index].angle_servo))
 
 
-def check_move_to_tool_select(gpad):
+def check_move_to_tool_select(gpad, command_buffer):
     if gpad.get_button(8):
-        tool_grab_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
-                          {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5},
-                          {'ind': 11, 'lag': .5, 'angle': 118.0}]
-        move_arm_to_pos(tool_grab_pose)
+        command_buffer.append(ReadInput.MACRO_SELECT_TOOL)
 
 
 def main():
@@ -401,9 +423,7 @@ def main():
 
         new_events = pygame.event.get()
         if len(new_events) != 0:
-            events = new_events
-            # for event in events:
-            #     print(event)
+            events = new_events  # for event in events:  #     print(event)
 
         if gamepad.get_button(9):
             print('right stick pressed')
@@ -413,7 +433,7 @@ def main():
 
         replay_buffer = check_replay(replay_buffer)
 
-        check_move_to_tool_select(gamepad)
+
         check_print_angle(gamepad)
         check_move_to_stance()
         check_move_to_init(gamepad)
