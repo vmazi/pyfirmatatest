@@ -221,6 +221,11 @@ def check_base_rotate(horizontal_axis_r, vertical_axis_r, buffer):
         buffer.append(ReadInput.BLACK_BASE_ROT_DEC)
 
 
+def check_move_to_tool_select(gpad, command_buffer):
+    if gpad.get_button(8):
+        command_buffer.append(ReadInput.MACRO_SELECT_TOOL)
+
+
 def generate_commands(gamepad):
     command_buffer = []
 
@@ -403,11 +408,6 @@ def check_print_angle(gpad):
             print('servo:' + str(index) + ' has angle: ', str(servomotors[index].angle_servo))
 
 
-def check_move_to_tool_select(gpad, command_buffer):
-    if gpad.get_button(8):
-        command_buffer.append(ReadInput.MACRO_SELECT_TOOL)
-
-
 def main():
     joysticks = setup_arm_control()
     events = []
@@ -432,7 +432,6 @@ def main():
         record_to_buffer = check_end_record(record_to_buffer)
 
         replay_buffer = check_replay(replay_buffer)
-
 
         check_print_angle(gamepad)
         check_move_to_stance()
