@@ -193,28 +193,38 @@ def check_claw_rotate(gpad, buffer):
         buffer.append(ReadInput.BLACK_CLAW_ROT_INC)
 
 
-def check_tert_vert(horizontal_axis_l, vertical_axis_l, buffer):
+def check_tert_vert(gamepad, buffer):
+    horizontal_axis_l = gamepad.get_axis(0)
+    vertical_axis_l = gamepad.get_axis(1)
+
     if check_stick_left(horizontal_axis_l, vertical_axis_l):
         buffer.append(ReadInput.BLACK_TERT_VERT_DEC)
     elif check_stick_right(horizontal_axis_l, vertical_axis_l):
         buffer.append(ReadInput.BLACK_TERT_VERT_INC)
 
 
-def check_secondary_vert(horizontal_axis_l, vertical_axis_l, buffer):
+def check_secondary_vert(gamepad, buffer):
+    horizontal_axis_l = gamepad.get_axis(0)
+    vertical_axis_l = gamepad.get_axis(1)
+
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
         buffer.append(ReadInput.BLACK_SEC_VERT_INC)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
         buffer.append(ReadInput.BLACK_SEC_VERT_DEC)
 
 
-def check_primary_vert(horizontal_axis_r, vertical_axis_r, buffer):
+def check_primary_vert(gamepad, buffer):
+    horizontal_axis_r = gamepad.get_axis(2)
+    vertical_axis_r = gamepad.get_axis(3)
     if check_stick_down(horizontal_axis_r, vertical_axis_r):
         buffer.append(ReadInput.BLACK_PRI_VERT_INC)
     elif check_stick_up(horizontal_axis_r, vertical_axis_r):
         buffer.append(ReadInput.BLACK_PRI_VERT_DEC)
 
 
-def check_base_rotate(horizontal_axis_r, vertical_axis_r, buffer):
+def check_base_rotate(gamepad, buffer):
+    horizontal_axis_r = gamepad.get_axis(2)
+    vertical_axis_r = gamepad.get_axis(3)
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
         buffer.append(ReadInput.BLACK_BASE_ROT_INC)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
@@ -239,13 +249,13 @@ def generate_commands(gamepad):
 
     check_claw_rotate(gamepad, command_buffer)
 
-    check_tert_vert(horizontal_axis_l, vertical_axis_l, command_buffer)
+    check_tert_vert(gamepad, command_buffer)
 
-    check_secondary_vert(horizontal_axis_l, vertical_axis_l, command_buffer)
+    check_secondary_vert(gamepad, command_buffer)
 
-    check_primary_vert(horizontal_axis_r, vertical_axis_r, command_buffer)
+    check_primary_vert(gamepad, command_buffer)
 
-    check_base_rotate(horizontal_axis_r, vertical_axis_r, command_buffer)
+    check_base_rotate(gamepad, command_buffer)
 
     check_silver_claw_grab(command_buffer)
 
