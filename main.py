@@ -45,6 +45,8 @@ class ReadInput(Enum):
 
     MACRO_SELECT_TOOL = "MACRO_SELECT_TOOL"
 
+    MACRO_MOVE_TO_INIT = "MACRO_MOVE_TO_INIT"
+
 
 DEADZONE = .2
 
@@ -236,6 +238,11 @@ def check_move_to_tool_select(gpad, command_buffer):
         command_buffer.append(ReadInput.MACRO_SELECT_TOOL)
 
 
+def check_move_to_init(gpad, command_buffer):
+    if gpad.get_button(7):
+        command_buffer.append(ReadInput.MACRO_MOVE_TO_INIT)
+
+
 def generate_commands(gamepad):
     command_buffer = []
 
@@ -264,6 +271,9 @@ def generate_commands(gamepad):
     check_silver_base_rotate(gamepad, command_buffer)
 
     check_move_to_tool_select(gamepad, command_buffer)
+
+    check_move_to_init(gamepad, command_buffer)
+
     return command_buffer
 
 
@@ -330,6 +340,13 @@ def execute_macro_command(input_command):
                               {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5},
                               {'ind': 11, 'lag': .5, 'angle': 118.0}]
             move_arm_to_pos(tool_grab_pose)
+        case ReadInput.MACRO_MOVE_TO_INIT:
+            hold_pose = [{'ind': 5, 'angle': 104}, {'ind': 0, 'angle': 50}, {'ind': 1, 'angle': 33}, {'ind': 2, 'angle': 47},
+                 {'ind': 3, 'angle': 130}, {'ind': 4, 'angle': 90}]
+            move_arm_to_pos(hold_pose)
+            hold_pose = [{'ind': 11, 'angle': 87}, {'ind': 6, 'angle': 50}, {'ind': 7, 'angle': 33}, {'ind': 8, 'angle': 47},
+                 {'ind': 9, 'angle': 80}, {'ind': 10, 'angle': 90}]
+            move_arm_to_pos(hold_pose)
 
 
 def execute_command(input_command):
@@ -341,21 +358,14 @@ def execute_command(input_command):
         execute_macro_command(input_command)
 
 
-def check_move_to_stance():
-    if keyboard.is_pressed('s'):
-        hold_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
-                     {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5}, {'ind': 11, 'lag': .5, 'angle': 118.0}]
-        move_arm_to_pos(hold_pose)
+# def check_move_to_stance():
+#     if keyboard.is_pressed('s'):
+#         hold_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
+#                      {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5}, {'ind': 11, 'lag': .5, 'angle': 118.0}]
+#         move_arm_to_pos(hold_pose)
 
 
-def check_move_to_init(gpad):
-    if gpad.get_button(7):
-        hold_pose = [{'ind': 5, 'angle': 104}, {'ind': 0, 'angle': 50}, {'ind': 1, 'angle': 33},
-                     {'ind': 2, 'angle': 47}, {'ind': 3, 'angle': 130}, {'ind': 4, 'angle': 90}]
-        move_arm_to_pos(hold_pose)
-        hold_pose = [{'ind': 11, 'angle': 87}, {'ind': 6, 'angle': 50}, {'ind': 7, 'angle': 33},
-                     {'ind': 8, 'angle': 47}, {'ind': 9, 'angle': 80}, {'ind': 10, 'angle': 90}]
-        move_arm_to_pos(hold_pose)
+
 
 
 def move_arm_to_pos(desired_pose):
@@ -438,8 +448,6 @@ def main():
         replay_buffer = check_replay(replay_buffer)
 
         check_print_angle(gamepad)
-        check_move_to_stance()
-        check_move_to_init(gamepad)
 
         if replay_buffer:
             if len(recorded_buffer) == 0:
