@@ -43,9 +43,9 @@ class ReadInput(Enum):
     BLACK_BASE_ROT_INC = "BLACK_BASE_ROT_INC"
     BLACK_BASE_ROT_DEC = "BLACK_BASE_ROT_DEC"
 
-    MACRO_SELECT_TOOL = "MACRO_SELECT_TOOL"
+    DIRECT_SELECT_TOOL = "DIRECT_SELECT_TOOL"
 
-    MACRO_MOVE_TO_INIT = "MACRO_MOVE_TO_INIT"
+    DIRECT_MOVE_TO_INIT = "DIRECT_MOVE_TO_INIT"
 
 
 DEADZONE = .2
@@ -235,12 +235,12 @@ def check_base_rotate(gamepad, buffer):
 
 def check_move_to_tool_select(gpad, command_buffer):
     if gpad.get_button(8):
-        command_buffer.append(ReadInput.MACRO_SELECT_TOOL)
+        command_buffer.append(ReadInput.DIRECT_SELECT_TOOL)
 
 
 def check_move_to_init(gpad, command_buffer):
     if gpad.get_button(7):
-        command_buffer.append(ReadInput.MACRO_MOVE_TO_INIT)
+        command_buffer.append(ReadInput.DIRECT_MOVE_TO_INIT)
 
 
 def generate_commands(gamepad):
@@ -333,14 +333,14 @@ def execute_silver_arm_command(input_command):
             decrease_servo_angle(6, 40)
 
 
-def execute_macro_command(input_command):
+def execute_direct_command(input_command):
     match input_command:
-        case ReadInput.MACRO_SELECT_TOOL:
+        case ReadInput.DIRECT_SELECT_TOOL:
             tool_grab_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
                               {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5},
                               {'ind': 11, 'lag': .5, 'angle': 118.0}]
             move_arm_to_pos(tool_grab_pose)
-        case ReadInput.MACRO_MOVE_TO_INIT:
+        case ReadInput.DIRECT_MOVE_TO_INIT:
             hold_pose = [{'ind': 5, 'angle': 104}, {'ind': 0, 'angle': 50}, {'ind': 1, 'angle': 33},
                          {'ind': 2, 'angle': 47}, {'ind': 3, 'angle': 130}, {'ind': 4, 'angle': 90}]
             move_arm_to_pos(hold_pose)
@@ -355,7 +355,7 @@ def execute_command(input_command):
     elif input_command.value.startswith("SILVER"):
         execute_silver_arm_command(input_command)
     else:
-        execute_macro_command(input_command)
+        execute_direct_command(input_command)
 
 
 # def check_move_to_stance():
