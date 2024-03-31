@@ -341,11 +341,11 @@ def execute_macro_command(input_command):
                               {'ind': 11, 'lag': .5, 'angle': 118.0}]
             move_arm_to_pos(tool_grab_pose)
         case ReadInput.MACRO_MOVE_TO_INIT:
-            hold_pose = [{'ind': 5, 'angle': 104}, {'ind': 0, 'angle': 50}, {'ind': 1, 'angle': 33}, {'ind': 2, 'angle': 47},
-                 {'ind': 3, 'angle': 130}, {'ind': 4, 'angle': 90}]
+            hold_pose = [{'ind': 5, 'angle': 104}, {'ind': 0, 'angle': 50}, {'ind': 1, 'angle': 33},
+                         {'ind': 2, 'angle': 47}, {'ind': 3, 'angle': 130}, {'ind': 4, 'angle': 90}]
             move_arm_to_pos(hold_pose)
-            hold_pose = [{'ind': 11, 'angle': 87}, {'ind': 6, 'angle': 50}, {'ind': 7, 'angle': 33}, {'ind': 8, 'angle': 47},
-                 {'ind': 9, 'angle': 80}, {'ind': 10, 'angle': 90}]
+            hold_pose = [{'ind': 11, 'angle': 87}, {'ind': 6, 'angle': 50}, {'ind': 7, 'angle': 33},
+                         {'ind': 8, 'angle': 47}, {'ind': 9, 'angle': 80}, {'ind': 10, 'angle': 90}]
             move_arm_to_pos(hold_pose)
 
 
@@ -363,9 +363,6 @@ def execute_command(input_command):
 #         hold_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
 #                      {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5}, {'ind': 11, 'lag': .5, 'angle': 118.0}]
 #         move_arm_to_pos(hold_pose)
-
-
-
 
 
 def move_arm_to_pos(desired_pose):
