@@ -239,12 +239,6 @@ def check_move_to_tool_select(gpad, command_buffer):
 def generate_commands(gamepad):
     command_buffer = []
 
-    horizontal_axis_l = gamepad.get_axis(0)
-    vertical_axis_l = gamepad.get_axis(1)
-
-    horizontal_axis_r = gamepad.get_axis(2)
-    vertical_axis_r = gamepad.get_axis(3)
-
     check_claw_grab(gamepad, command_buffer)
 
     check_claw_rotate(gamepad, command_buffer)
