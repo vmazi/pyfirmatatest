@@ -1,12 +1,9 @@
-import time
-
 import keyboard
 import pyfirmata
 import pygame
 
 from command import execute_command
 from control import generate_commands, check_record, check_end_record, check_replay, check_save_record
-from move_servo import dec_serv_angle, inc_serv_angle, move_servo
 
 # set up arduino board
 board = pyfirmata.Arduino('COM3')

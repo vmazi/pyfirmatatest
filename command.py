@@ -1,10 +1,4 @@
-from enum import Enum
-
-import keyboard
-import pygame
-
-from control import MAX_ANGLE_FULL, MIN_ANGLE, check_stick_down, check_stick_up, check_stick_right, check_stick_left, \
-    ReadInput
+from control import MAX_ANGLE_FULL, MIN_ANGLE, ReadInput
 
 from move_servo import move_arm_to_pos, decrease_servo_angle, increase_servo_angle
 
