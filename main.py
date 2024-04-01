@@ -21,6 +21,7 @@ servo_init_angle = [50, 33, 47, 130, 90, 104, 50, 33, 47, 80, 90, 87]
 
 servomotors = []
 
+
 def setup_arm_control():
     pygame.init()
     joysticks = []
@@ -98,7 +99,7 @@ def main():
             else:
                 replay_commands = recorded_buffer.pop(0)
                 for command in replay_commands:
-                    execute_command(command, servomotors, degree_increment )
+                    execute_command(command, servomotors, degree_increment)
         else:
             command_buffer = generate_commands(gamepad)
             for command in command_buffer:
