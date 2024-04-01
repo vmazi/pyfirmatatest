@@ -3,7 +3,8 @@ import pyfirmata
 import pygame
 
 from command import execute_command
-from control import generate_commands, check_record, check_end_record, check_replay, check_save_record
+from control import generate_commands, check_record, check_end_record, check_replay, check_save_record, \
+    check_print_angle
 
 # set up arduino board
 board = pyfirmata.Arduino('COM3')
@@ -56,13 +57,6 @@ def setup_arm_control():
 #         move_servo(servomotors[4].servo, servomotors[4].angle_servo)
 #
 
-def check_print_angle(gpad):
-    if keyboard.is_pressed('p'):
-        print(gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT))
-        print(gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT))
-        for index in range(0, len(servomotors)):
-            print('servo:' + str(index) + ' has angle: ', str(servomotors[index].angle_servo))
-
 
 def main():
     joysticks = setup_arm_control()
@@ -89,7 +83,7 @@ def main():
 
         replay_buffer = check_replay(replay_buffer)
 
-        check_print_angle(gamepad)
+        check_print_angle(gamepad, servomotors)
         check_save_record(recorded_buffer)
 
         if replay_buffer:
