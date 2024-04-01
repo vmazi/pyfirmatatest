@@ -54,6 +54,8 @@ class ControlInput(Enum):
 
     DIRECT_MOVE_TO_INIT = "DIRECT_MOVE_TO_INIT"
 
+    MACRO_GRAB_INGREDIENT = "MACRO_GRAB_INGREDIENT"
+
 
 def check_print_angle(gpad, servomotors):
     if keyboard.is_pressed('p'):
@@ -72,17 +74,13 @@ def check_end_record(currently_recording):
             return True
 
 
-def check_replay(currently_replaying):
-    if currently_replaying:
-        return currently_replaying
+def check_replay():
     if keyboard.is_pressed('e'):
         print("replaying!")
         return True
 
 
-def check_record(currently_recording):
-    if currently_recording:
-        return currently_recording
+def check_record():
     if keyboard.is_pressed('r'):
         print("recording!")
         return True

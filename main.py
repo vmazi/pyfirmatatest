@@ -1,11 +1,12 @@
 import datetime
 
+import keyboard
 import pyfirmata
 import pygame
-
+import os
 from command_executor import execute_command
 from control import generate_commands, check_record, check_end_record, check_replay, check_save_record, \
-    check_print_angle
+    check_print_angle, ControlInput
 
 # set up arduino board
 board = pyfirmata.Arduino('COM3')
@@ -43,6 +44,33 @@ def setup_arm_control():
     return joysticks
 
 
+def is_file_macro(file_name):
+    try:
+        ControlInput(file_name.split(".")[0])
+        return True
+    except ValueError:
+        return False
+
+
+def load_macros():
+    macro_map = {}
+    macro_path = "/macros"
+    file_list = os.listdir(macro_path)
+    for file_name in file_list:
+        if is_file_macro(file_name):
+            macro_name = ControlInput(file_name.split(".")[0]).value
+            macro_commands = []
+            with open(macro_path + os.sep + file_name, "r") as macro_file:
+                for line in macro_file.readlines():
+                    if line.isspace():
+                        macro_commands.append([])
+                    else:
+                        line_commands = line.split(" ")
+                        macro_commands.append(line_commands)
+                macro_map[macro_name] = macro_commands
+    return macro_map
+
+
 def main():
     joysticks = setup_arm_control()
     events = []
@@ -55,6 +83,9 @@ def main():
     recorded_buffer = []
     save_on_replay = False
     save_buffer = []
+    macro_map = load_macros()
+    execute_macro = False
+    macro_command_buffer = []
     while True:
         clock.tick(120)
 
@@ -62,16 +93,28 @@ def main():
         if len(new_events) != 0:
             events = new_events  # for event in events:  #     print(event)
 
-        if gamepad.get_button(9):
-            print('right stick pressed')
+        # if gamepad.get_button(9):
+        #     print('right stick pressed')
 
-        record_to_buffer = check_record(record_to_buffer)
+        if not execute_macro:
+            if keyboard.is_pressed('s'):
+                macro_command_buffer = macro_map[ControlInput.MACRO_GRAB_INGREDIENT.value]
+                execute_macro = True
+
+        if execute_macro:
+            execute_macro = run_macro_tick(execute_macro, macro_command_buffer)
+            continue
+
+        if not record_to_buffer:
+            record_to_buffer = check_record()
 
         record_to_buffer = check_end_record(record_to_buffer)
 
-        replay_buffer = check_replay(replay_buffer)
+        if not replay_buffer:
+            replay_buffer = check_replay()
 
         check_print_angle(gamepad, servomotors)
+
         if not save_on_replay:
             save_on_replay = check_save_record()
 
@@ -80,27 +123,48 @@ def main():
                 replay_buffer = False
                 print("finished replaying!")
                 if save_on_replay:
-                    saved_file_name = (
-                            str(datetime.datetime.now()).replace(" ", "T").replace(":", "_") + "_saved_macro.txt")
-                    with open(saved_file_name, "w") as file:
-                        for save_commands in save_buffer:
-                            for command in save_commands:
-                                file.write(command.value + " ")
-                            file.write("\n")
-                        print("saved this replay as: " + saved_file_name)
+                    save_replay_to_file(save_buffer)
                     save_on_replay = False
             else:
-                replay_commands = recorded_buffer.pop(0)
-                if save_on_replay:
-                    save_buffer.append(replay_commands)
-                for command in replay_commands:
-                    execute_command(command, servomotors, degree_increment)
+                replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay)
         else:
-            command_buffer = generate_commands(gamepad)
-            for command in command_buffer:
-                execute_command(command, servomotors, degree_increment)
-            if record_to_buffer:
-                recorded_buffer.append(command_buffer)
+            execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer)
+
+
+def execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer):
+    command_buffer = generate_commands(gamepad)
+    for command in command_buffer:
+        execute_command(command, servomotors, degree_increment)
+    if record_to_buffer:
+        recorded_buffer.append(command_buffer)
+
+
+def run_macro_tick(execute_macro, macro_command_buffer):
+    if len(macro_command_buffer) == 0:
+        execute_macro = False
+    else:
+        macro_commands = macro_command_buffer.pop(0)
+        for command in macro_commands:
+            execute_command(ControlInput(command), servomotors, degree_increment)
+    return execute_macro
+
+
+def replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay):
+    replay_commands = recorded_buffer.pop(0)
+    if save_on_replay:
+        save_buffer.append(replay_commands)
+    for command in replay_commands:
+        execute_command(command, servomotors, degree_increment)
+
+
+def save_replay_to_file(save_buffer):
+    saved_file_name = (str(datetime.datetime.now()).replace(" ", "T").replace(":", "_") + "_saved_macro.txt")
+    with open(saved_file_name, "w") as file:
+        for save_commands in save_buffer:
+            for command in save_commands:
+                file.write(command.value + " ")
+            file.write("\n")
+        print("saved this replay as: " + saved_file_name)
 
 
 if __name__ == "__main__":
