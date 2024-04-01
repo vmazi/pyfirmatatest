@@ -1,7 +1,5 @@
 import datetime
-import time
 
-import keyboard
 import pyfirmata
 import pygame
 
@@ -45,22 +43,6 @@ def setup_arm_control():
     return joysticks
 
 
-# def check_move_to_stance():
-#     if keyboard.is_pressed('s'):
-#         hold_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
-#                      {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5}, {'ind': 11, 'lag': .5, 'angle': 118.0}]
-#         move_arm_to_pos(hold_pose)
-
-
-# def check_chop_input():
-#     if keyboard.is_pressed('c'):
-#         servomotors[2].angle_servo = 35.0
-#         move_servo(servomotors[2].servo, servomotors[2].angle_servo)
-#         servomotors[4].angle_servo = 82.0
-#         move_servo(servomotors[4].servo, servomotors[4].angle_servo)
-#
-
-
 def main():
     joysticks = setup_arm_control()
     events = []
@@ -99,9 +81,7 @@ def main():
                 print("finished replaying!")
                 if save_on_replay:
                     saved_file_name = (
-                                str(datetime.datetime.now()).replace(" ", "T")
-                                .replace(":", "_")
-                                + "_saved_macro.txt")
+                            str(datetime.datetime.now()).replace(" ", "T").replace(":", "_") + "_saved_macro.txt")
                     with open(saved_file_name, "w") as file:
                         for save_commands in save_buffer:
                             for command in save_commands:
