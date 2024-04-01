@@ -103,7 +103,10 @@ def main():
                                 .replace(":", "_")
                                 + "_saved_macro.txt")
                     with open(saved_file_name, "w") as file:
-                        file.write(str(save_buffer))
+                        for save_commands in save_buffer:
+                            for command in save_commands:
+                                file.write(command.value + " ")
+                            file.write("\n")
                         print("saved this replay as: " + saved_file_name)
                     save_on_replay = False
             else:
