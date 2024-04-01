@@ -2,7 +2,7 @@ import keyboard
 import pyfirmata
 import pygame
 
-from command import execute_command
+from command_executor import execute_command
 from control import generate_commands, check_record, check_end_record, check_replay, check_save_record, \
     check_print_angle
 

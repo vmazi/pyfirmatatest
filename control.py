@@ -13,7 +13,7 @@ MAX_ANGLE_FULL = 180
 MAX_ANGLE_HALF = 110
 
 
-class ReadInput(Enum):
+class ControlInput(Enum):
     SILVER_CLAW_ROT_INC = "SILVER_CLAW_ROT_INC"
     SILVER_CLAW_ROT_DEC = "SILVER_CLAW_ROT_DEC"
 
@@ -96,58 +96,58 @@ def check_save_record(recorded_buffer):
 
 def check_silver_claw_grab(buffer):
     if keyboard.is_pressed('h'):
-        buffer.append(ReadInput.SILVER_CLAW_GRAB_INC)
+        buffer.append(ControlInput.SILVER_CLAW_GRAB_INC)
     elif keyboard.is_pressed('j'):
-        buffer.append(ReadInput.SILVER_CLAW_GRAB_DEC)
+        buffer.append(ControlInput.SILVER_CLAW_GRAB_DEC)
 
 
 def check_silver_claw_rotate(buffer):
     if keyboard.is_pressed('n'):
-        buffer.append(ReadInput.SILVER_CLAW_ROT_INC)
+        buffer.append(ControlInput.SILVER_CLAW_ROT_INC)
     elif keyboard.is_pressed('m'):
-        buffer.append(ReadInput.SILVER_CLAW_ROT_DEC)
+        buffer.append(ControlInput.SILVER_CLAW_ROT_DEC)
 
 
 def check_silver_tert_vert(gpad, buffer):
     if gpad.get_button(4):
-        buffer.append(ReadInput.SILVER_TERT_VERT_DEC)
+        buffer.append(ControlInput.SILVER_TERT_VERT_DEC)
     elif gpad.get_button(5):
-        buffer.append(ReadInput.SILVER_TERT_VERT_INC)
+        buffer.append(ControlInput.SILVER_TERT_VERT_INC)
 
 
 def check_silver_secondary_vert(gpad, buffer):
     if gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT) > .5:
-        buffer.append(ReadInput.SILVER_SEC_VERT_DEC)
+        buffer.append(ControlInput.SILVER_SEC_VERT_DEC)
     elif gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT) > .5:
-        buffer.append(ReadInput.SILVER_SEC_VERT_INC)
+        buffer.append(ControlInput.SILVER_SEC_VERT_INC)
 
 
 def check_silver_primary_vert(gpad, buffer):
     if gpad.get_hat(0) == (0, -1):
-        buffer.append(ReadInput.SILVER_PRI_VERT_INC)
+        buffer.append(ControlInput.SILVER_PRI_VERT_INC)
     elif gpad.get_hat(0) == (0, 1):
-        buffer.append(ReadInput.SILVER_PRI_VERT_DEC)
+        buffer.append(ControlInput.SILVER_PRI_VERT_DEC)
 
 
 def check_silver_base_rotate(gpad, buffer):
     if gpad.get_hat(0) == (-1, 0):
-        buffer.append(ReadInput.SILVER_BASE_ROT_INC)
+        buffer.append(ControlInput.SILVER_BASE_ROT_INC)
     elif gpad.get_hat(0) == (1, 0):
-        buffer.append(ReadInput.SILVER_BASE_ROT_DEC)
+        buffer.append(ControlInput.SILVER_BASE_ROT_DEC)
 
 
 def check_claw_grab(gpad, buffer):
     if gpad.get_button(pygame.CONTROLLER_BUTTON_A):
-        buffer.append(ReadInput.BLACK_CLAW_GRAB_INC)
+        buffer.append(ControlInput.BLACK_CLAW_GRAB_INC)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_B):
-        buffer.append(ReadInput.BLACK_CLAW_GRAB_DEC)
+        buffer.append(ControlInput.BLACK_CLAW_GRAB_DEC)
 
 
 def check_claw_rotate(gpad, buffer):
     if gpad.get_button(pygame.CONTROLLER_BUTTON_X):
-        buffer.append(ReadInput.BLACK_CLAW_ROT_DEC)
+        buffer.append(ControlInput.BLACK_CLAW_ROT_DEC)
     elif gpad.get_button(pygame.CONTROLLER_BUTTON_Y):
-        buffer.append(ReadInput.BLACK_CLAW_ROT_INC)
+        buffer.append(ControlInput.BLACK_CLAW_ROT_INC)
 
 
 def check_tert_vert(gamepad, buffer):
@@ -155,9 +155,9 @@ def check_tert_vert(gamepad, buffer):
     vertical_axis_l = gamepad.get_axis(1)
 
     if check_stick_left(horizontal_axis_l, vertical_axis_l):
-        buffer.append(ReadInput.BLACK_TERT_VERT_DEC)
+        buffer.append(ControlInput.BLACK_TERT_VERT_DEC)
     elif check_stick_right(horizontal_axis_l, vertical_axis_l):
-        buffer.append(ReadInput.BLACK_TERT_VERT_INC)
+        buffer.append(ControlInput.BLACK_TERT_VERT_INC)
 
 
 def check_secondary_vert(gamepad, buffer):
@@ -165,37 +165,37 @@ def check_secondary_vert(gamepad, buffer):
     vertical_axis_l = gamepad.get_axis(1)
 
     if check_stick_up(horizontal_axis_l, vertical_axis_l):
-        buffer.append(ReadInput.BLACK_SEC_VERT_INC)
+        buffer.append(ControlInput.BLACK_SEC_VERT_INC)
     elif check_stick_down(horizontal_axis_l, vertical_axis_l):
-        buffer.append(ReadInput.BLACK_SEC_VERT_DEC)
+        buffer.append(ControlInput.BLACK_SEC_VERT_DEC)
 
 
 def check_primary_vert(gamepad, buffer):
     horizontal_axis_r = gamepad.get_axis(2)
     vertical_axis_r = gamepad.get_axis(3)
     if check_stick_down(horizontal_axis_r, vertical_axis_r):
-        buffer.append(ReadInput.BLACK_PRI_VERT_INC)
+        buffer.append(ControlInput.BLACK_PRI_VERT_INC)
     elif check_stick_up(horizontal_axis_r, vertical_axis_r):
-        buffer.append(ReadInput.BLACK_PRI_VERT_DEC)
+        buffer.append(ControlInput.BLACK_PRI_VERT_DEC)
 
 
 def check_base_rotate(gamepad, buffer):
     horizontal_axis_r = gamepad.get_axis(2)
     vertical_axis_r = gamepad.get_axis(3)
     if check_stick_left(horizontal_axis_r, vertical_axis_r):
-        buffer.append(ReadInput.BLACK_BASE_ROT_INC)
+        buffer.append(ControlInput.BLACK_BASE_ROT_INC)
     elif check_stick_right(horizontal_axis_r, vertical_axis_r):
-        buffer.append(ReadInput.BLACK_BASE_ROT_DEC)
+        buffer.append(ControlInput.BLACK_BASE_ROT_DEC)
 
 
 def check_move_to_tool_select(gpad, command_buffer):
     if gpad.get_button(8):
-        command_buffer.append(ReadInput.DIRECT_SELECT_TOOL)
+        command_buffer.append(ControlInput.DIRECT_SELECT_TOOL)
 
 
 def check_move_to_init(gpad, command_buffer):
     if gpad.get_button(7):
-        command_buffer.append(ReadInput.DIRECT_MOVE_TO_INIT)
+        command_buffer.append(ControlInput.DIRECT_MOVE_TO_INIT)
 
 
 def check_stick_up(x_axis, y_axis):
