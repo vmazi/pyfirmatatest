@@ -88,10 +88,10 @@ def check_record(currently_recording):
         return True
 
 
-def check_save_record(recorded_buffer):
-    if keyboard.is_pressed('s') and len(recorded_buffer) > 0:
-        with open(str(time.time()) + ".txt", "w") as file:
-            file.write(str(recorded_buffer))
+def check_save_record():
+    if keyboard.is_pressed('s'):
+        print("will save on replay")
+        return True
 
 
 def check_silver_claw_grab(buffer):

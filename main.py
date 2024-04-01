@@ -1,3 +1,6 @@
+import datetime
+import time
+
 import keyboard
 import pyfirmata
 import pygame
@@ -68,6 +71,8 @@ def main():
     record_to_buffer = False
     replay_buffer = False
     recorded_buffer = []
+    save_on_replay = False
+    save_buffer = []
     while True:
         clock.tick(120)
 
@@ -79,19 +84,32 @@ def main():
             print('right stick pressed')
 
         record_to_buffer = check_record(record_to_buffer)
+
         record_to_buffer = check_end_record(record_to_buffer)
 
         replay_buffer = check_replay(replay_buffer)
 
         check_print_angle(gamepad, servomotors)
-        check_save_record(recorded_buffer)
+        if not save_on_replay:
+            save_on_replay = check_save_record()
 
         if replay_buffer:
             if len(recorded_buffer) == 0:
                 replay_buffer = False
                 print("finished replaying!")
+                if save_on_replay:
+                    saved_file_name = (
+                                str(datetime.datetime.now()).replace(" ", "T")
+                                .replace(":", "_")
+                                + "_saved_macro.txt")
+                    with open(saved_file_name, "w") as file:
+                        file.write(str(save_buffer))
+                        print("saved this replay as: " + saved_file_name)
+                    save_on_replay = False
             else:
                 replay_commands = recorded_buffer.pop(0)
+                if save_on_replay:
+                    save_buffer.append(replay_commands)
                 for command in replay_commands:
                     execute_command(command, servomotors, degree_increment)
         else:
