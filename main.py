@@ -84,7 +84,7 @@ def main():
     save_on_replay = False
     save_buffer = []
     macro_map = load_macros()
-    execute_macro = False
+
     macro_command_buffer = []
     while True:
         clock.tick(120)
@@ -96,13 +96,8 @@ def main():
         # if gamepad.get_button(9):
         #     print('right stick pressed')
 
-        if not execute_macro:
-            if keyboard.is_pressed('s'):
-                macro_command_buffer = macro_map[ControlInput.MACRO_GRAB_INGREDIENT.value]
-                execute_macro = True
-
-        if execute_macro:
-            execute_macro = run_macro_tick(execute_macro, macro_command_buffer)
+        if len(macro_command_buffer) > 0:
+            run_macro_tick(macro_command_buffer, macro_map)
             continue
 
         if not record_to_buffer:
@@ -128,33 +123,37 @@ def main():
             else:
                 replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay)
         else:
-            execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer)
+            macro_command_buffer = execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer)
 
 
-def execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer):
+def execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer, macro_map):
     command_buffer = generate_commands(gamepad)
+    found_macro_commands = []
     for command in command_buffer:
-        execute_command(command, servomotors, degree_increment)
+        new_macro_commands = execute_command(command, servomotors, degree_increment, macro_map)
+        if len(new_macro_commands) > 0:
+            found_macro_commands.extend(new_macro_commands)
     if record_to_buffer:
         recorded_buffer.append(command_buffer)
+    return found_macro_commands
 
 
-def run_macro_tick(execute_macro, macro_command_buffer):
-    if len(macro_command_buffer) == 0:
-        execute_macro = False
-    else:
-        macro_commands = macro_command_buffer.pop(0)
-        for command in macro_commands:
-            execute_command(ControlInput(command), servomotors, degree_increment)
-    return execute_macro
+def run_macro_tick(macro_command_buffer, macro_map):
+    macro_commands = macro_command_buffer.pop(0)
+    for command in macro_commands:
+        macro_command_buffer.extend(execute_command(ControlInput(command), servomotors, degree_increment, macro_map))
 
 
-def replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay):
+def replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay, macro_map):
     replay_commands = recorded_buffer.pop(0)
+    found_macro_commands = []
     if save_on_replay:
         save_buffer.append(replay_commands)
     for command in replay_commands:
-        execute_command(command, servomotors, degree_increment)
+        new_macro_commands = execute_command(command, servomotors, degree_increment, macro_map)
+        if len(new_macro_commands) > 0:
+            found_macro_commands.extend(new_macro_commands)
+    return found_macro_commands
 
 
 def save_replay_to_file(save_buffer):

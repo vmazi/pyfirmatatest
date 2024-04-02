@@ -75,10 +75,19 @@ def execute_direct_command(input_command, servomotors):
             move_arm_to_pos(hold_pose, servomotors)
 
 
-def execute_command(input_command, servomotors, degree_increment):
+def execute_macro_command(input_command, macro_map):
+    return macro_map[ControlInput(input_command).value]
+
+
+def execute_command(input_command, servomotors, degree_increment, macro_map):
     if input_command.value.startswith("BLACK"):
         execute_black_arm_command(input_command, servomotors, degree_increment)
+        return []
     elif input_command.value.startswith("SILVER"):
         execute_silver_arm_command(input_command, servomotors, degree_increment)
-    else:
+        return []
+    elif input_command.value.startswith("DIRECT"):
         execute_direct_command(input_command, servomotors)
+        return []
+    else:
+        return execute_macro_command(input_command, macro_map)
