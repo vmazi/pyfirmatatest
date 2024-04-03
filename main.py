@@ -128,7 +128,7 @@ def main():
                     save_on_replay = False
             else:
                 macro_command_buffer = replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay,
-                    macro_map)
+                                                                  macro_map)
         else:
             macro_command_buffer = execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer, macro_map)
 
