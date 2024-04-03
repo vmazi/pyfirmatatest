@@ -127,11 +127,17 @@ def main():
                 macro_command_buffer = replay_command_from_buffer(recorded_buffer, save_buffer,
                                                                   save_on_replay_requested, macro_map)
         else:
-            macro_command_buffer = grab_inputs_and_execute_single_tick(gamepad, record_to_buffer_requested,
-                                                                       recorded_buffer, macro_map)
+            macro_command_buffer = execute_gamepad_inputs(gamepad, record_to_buffer_requested, recorded_buffer,
+                                                          macro_map)
 
 
-def grab_inputs_and_execute_single_tick(gamepad, record_to_buffer, recorded_buffer, macro_map):
+def run_macro_tick(macro_command_buffer, macro_map):
+    macro_commands = macro_command_buffer.pop(0)
+    for command in macro_commands:
+        macro_command_buffer.extend(execute_command(ControlInput(command), servomotors, degree_increment, macro_map))
+
+
+def execute_gamepad_inputs(gamepad, record_to_buffer, recorded_buffer, macro_map):
     command_buffer = generate_commands(gamepad)
     found_macro_commands = []
     for command in command_buffer:
@@ -141,12 +147,6 @@ def grab_inputs_and_execute_single_tick(gamepad, record_to_buffer, recorded_buff
     if record_to_buffer:
         recorded_buffer.append(command_buffer)
     return found_macro_commands
-
-
-def run_macro_tick(macro_command_buffer, macro_map):
-    macro_commands = macro_command_buffer.pop(0)
-    for command in macro_commands:
-        macro_command_buffer.extend(execute_command(ControlInput(command), servomotors, degree_increment, macro_map))
 
 
 def replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay, macro_map):
