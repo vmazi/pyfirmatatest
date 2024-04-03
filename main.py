@@ -99,9 +99,6 @@ def main():
         if len(new_events) != 0:
             events = new_events  # for event in events:  #     print(event)
 
-        #
-        #     print('right stick pressed')
-
         if len(macro_command_buffer) > 0:
             run_macro_tick(macro_command_buffer, macro_map)
             continue
