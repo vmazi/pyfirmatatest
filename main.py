@@ -99,7 +99,7 @@ def main():
         if len(new_events) != 0:
             events = new_events  # for event in events:  #     print(event)
 
-        # if gamepad.get_button(9):
+        #
         #     print('right stick pressed')
 
         if len(macro_command_buffer) > 0:

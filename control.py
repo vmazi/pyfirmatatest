@@ -92,8 +92,8 @@ def check_save_record():
         return True
 
 
-def check_macro_execute(buffer):
-    if keyboard.is_pressed('x'):
+def check_tool_ing_execute(gamepad, buffer):
+    if gamepad.get_button(9):
         buffer.append(ControlInput.MACRO_GRAB_INGREDIENT)
 
 
@@ -248,6 +248,6 @@ def generate_commands(gamepad):
 
     check_move_to_init(gamepad, command_buffer)
 
-    check_macro_execute(command_buffer)
+    check_tool_ing_execute(gamepad, command_buffer)
 
     return command_buffer
