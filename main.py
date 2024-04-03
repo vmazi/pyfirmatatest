@@ -84,10 +84,10 @@ def main():
     gamepad = joysticks[-1]
 
     clock = pygame.time.Clock()
-    record_to_buffer = False
-    replay_buffer = False
+    record_to_buffer_requested = False
+    replay_buffer_requested = False
     recorded_buffer = []
-    save_on_replay = False
+    save_on_replay_requested = False
     save_buffer = []
     macro_map = load_macros()
 
@@ -106,34 +106,35 @@ def main():
             run_macro_tick(macro_command_buffer, macro_map)
             continue
 
-        if not record_to_buffer:
-            record_to_buffer = check_record()
+        if not record_to_buffer_requested:
+            record_to_buffer_requested = check_record()
 
-        record_to_buffer = check_end_record(record_to_buffer)
+        record_to_buffer_requested = check_end_record(record_to_buffer_requested)
 
-        if not replay_buffer:
-            replay_buffer = check_replay()
+        if not replay_buffer_requested:
+            replay_buffer_requested = check_replay()
 
         check_print_angle(gamepad, servomotors)
 
-        if not save_on_replay:
-            save_on_replay = check_save_record()
+        if not save_on_replay_requested:
+            save_on_replay_requested = check_save_record()
 
-        if replay_buffer:
+        if replay_buffer_requested:
             if len(recorded_buffer) == 0:
-                replay_buffer = False
+                replay_buffer_requested = False
                 print("finished replaying!")
-                if save_on_replay:
+                if save_on_replay_requested:
                     save_replay_to_file(save_buffer)
-                    save_on_replay = False
+                    save_on_replay_requested = False
             else:
-                macro_command_buffer = replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay,
-                                                                  macro_map)
+                macro_command_buffer = replay_command_from_buffer(recorded_buffer, save_buffer,
+                                                                  save_on_replay_requested, macro_map)
         else:
-            macro_command_buffer = execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer, macro_map)
+            macro_command_buffer = grab_inputs_and_execute_single_tick(gamepad, record_to_buffer_requested,
+                                                                       recorded_buffer, macro_map)
 
 
-def execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer, macro_map):
+def grab_inputs_and_execute_single_tick(gamepad, record_to_buffer, recorded_buffer, macro_map):
     command_buffer = generate_commands(gamepad)
     found_macro_commands = []
     for command in command_buffer:
