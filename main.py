@@ -77,6 +77,46 @@ def load_macros():
     return macro_map
 
 
+def run_macro_tick(macro_command_buffer, macro_map):
+    macro_commands = macro_command_buffer.pop(0)
+    for command in macro_commands:
+        macro_command_buffer.extend(execute_command(ControlInput(command), servomotors, degree_increment, macro_map))
+
+
+def execute_gamepad_inputs(gamepad, record_to_buffer, recorded_buffer, macro_map):
+    command_buffer = generate_commands(gamepad)
+    found_macro_commands = []
+    for command in command_buffer:
+        new_macro_commands = execute_command(command, servomotors, degree_increment, macro_map)
+        if len(new_macro_commands) > 0:
+            found_macro_commands.extend(new_macro_commands)
+    if record_to_buffer:
+        recorded_buffer.append(command_buffer)
+    return found_macro_commands
+
+
+def replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay, macro_map):
+    replay_commands = recorded_buffer.pop(0)
+    found_macro_commands = []
+    if save_on_replay:
+        save_buffer.append(replay_commands)
+    for command in replay_commands:
+        new_macro_commands = execute_command(command, servomotors, degree_increment, macro_map)
+        if len(new_macro_commands) > 0:
+            found_macro_commands.extend(new_macro_commands)
+    return found_macro_commands
+
+
+def save_replay_to_file(save_buffer):
+    saved_file_name = (str(datetime.datetime.now()).replace(" ", "T").replace(":", "_") + "_saved_macro.txt")
+    with open(saved_file_name, "w") as file:
+        for save_commands in save_buffer:
+            for command in save_commands:
+                file.write(command.value + " ")
+            file.write("\n")
+        print("saved this replay as: " + saved_file_name)
+
+
 def main():
     joysticks = setup_arm_control()
     events = []
@@ -129,46 +169,6 @@ def main():
         else:
             macro_command_buffer = execute_gamepad_inputs(gamepad, record_to_buffer_requested, recorded_buffer,
                                                           macro_map)
-
-
-def run_macro_tick(macro_command_buffer, macro_map):
-    macro_commands = macro_command_buffer.pop(0)
-    for command in macro_commands:
-        macro_command_buffer.extend(execute_command(ControlInput(command), servomotors, degree_increment, macro_map))
-
-
-def execute_gamepad_inputs(gamepad, record_to_buffer, recorded_buffer, macro_map):
-    command_buffer = generate_commands(gamepad)
-    found_macro_commands = []
-    for command in command_buffer:
-        new_macro_commands = execute_command(command, servomotors, degree_increment, macro_map)
-        if len(new_macro_commands) > 0:
-            found_macro_commands.extend(new_macro_commands)
-    if record_to_buffer:
-        recorded_buffer.append(command_buffer)
-    return found_macro_commands
-
-
-def replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay, macro_map):
-    replay_commands = recorded_buffer.pop(0)
-    found_macro_commands = []
-    if save_on_replay:
-        save_buffer.append(replay_commands)
-    for command in replay_commands:
-        new_macro_commands = execute_command(command, servomotors, degree_increment, macro_map)
-        if len(new_macro_commands) > 0:
-            found_macro_commands.extend(new_macro_commands)
-    return found_macro_commands
-
-
-def save_replay_to_file(save_buffer):
-    saved_file_name = (str(datetime.datetime.now()).replace(" ", "T").replace(":", "_") + "_saved_macro.txt")
-    with open(saved_file_name, "w") as file:
-        for save_commands in save_buffer:
-            for command in save_commands:
-                file.write(command.value + " ")
-            file.write("\n")
-        print("saved this replay as: " + saved_file_name)
 
 
 if __name__ == "__main__":
