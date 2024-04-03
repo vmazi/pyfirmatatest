@@ -54,7 +54,7 @@ def is_file_macro(file_name):
 
 def load_macros():
     macro_map = {}
-    macro_path = "/macros"
+    macro_path = "macros"
     file_list = os.listdir(macro_path)
     for file_name in file_list:
         if is_file_macro(file_name):
@@ -65,9 +65,15 @@ def load_macros():
                     if line.isspace():
                         macro_commands.append([])
                     else:
-                        line_commands = line.split(" ")
-                        macro_commands.append(line_commands)
+                        line_commands = line.replace("\n", "").split(" ")
+                        cleaned_commands = []
+                        possible_commands = [c.value for c in ControlInput]
+                        for command in line_commands:
+                            if command in possible_commands:
+                                cleaned_commands.append(command)
+                        macro_commands.append(cleaned_commands)
                 macro_map[macro_name] = macro_commands
+    print("loaded macros: " + str(macro_map.keys()))
     return macro_map
 
 
@@ -121,8 +127,8 @@ def main():
                     save_replay_to_file(save_buffer)
                     save_on_replay = False
             else:
-                macro_command_buffer = replay_command_from_buffer(
-                    recorded_buffer, save_buffer, save_on_replay, macro_map)
+                macro_command_buffer = replay_command_from_buffer(recorded_buffer, save_buffer, save_on_replay,
+                    macro_map)
         else:
             macro_command_buffer = execute_single_tick_commands(gamepad, record_to_buffer, recorded_buffer, macro_map)
 

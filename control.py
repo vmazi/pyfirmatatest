@@ -92,6 +92,11 @@ def check_save_record():
         return True
 
 
+def check_macro_execute(buffer):
+    if keyboard.is_pressed('x'):
+        buffer.append(ControlInput.MACRO_GRAB_INGREDIENT)
+
+
 def check_silver_claw_grab(buffer):
     if keyboard.is_pressed('h'):
         buffer.append(ControlInput.SILVER_CLAW_GRAB_INC)
@@ -242,5 +247,7 @@ def generate_commands(gamepad):
     check_move_to_tool_select(gamepad, command_buffer)
 
     check_move_to_init(gamepad, command_buffer)
+
+    check_macro_execute(command_buffer)
 
     return command_buffer
