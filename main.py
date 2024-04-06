@@ -11,7 +11,7 @@ from control import generate_commands, check_record, check_end_record, check_rep
 # set up arduino board
 board = pyfirmata.Arduino('COM3')
 
-degree_increment = .75  # initial speed (degrees per keypress)
+degree_increment = .60  # initial speed (degrees per keypress)
 
 
 class Servo:
