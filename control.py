@@ -56,7 +56,7 @@ class ControlInput(Enum):
 
     MACRO_GRAB_INGREDIENT = "MACRO_GRAB_INGREDIENT"
 
-    MACRO_MOVE_TO_TOOL_SELECT = "MACRO_MOVE_TO_TOOL_SELECT"
+    MACRO_TOOL_SELECT = "MACRO_TOOL_SELECT"
 
 
 def check_print_angle(gpad, servomotors):
