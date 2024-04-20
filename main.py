@@ -78,14 +78,14 @@ def load_macros():
 
 
 def run_macro_tick(macro_command_buffer, macro_map):
-    macro_commands = macro_command_buffer[-1]
+    macro_command = macro_command_buffer[-1]
     macro_position = len(macro_command_buffer) - 1
-    command_set = macro_commands.pop(0)
+    command_set = macro_command.pop(0)
     for command in command_set:
-        new_macro_commands = execute_command(ControlInput(command), servomotors, degree_increment, macro_map)
-        if len(new_macro_commands) > 0:
-            macro_command_buffer.append(new_macro_commands)
-    if len(macro_commands) == 0:
+        new_macro_command = execute_command(ControlInput(command), servomotors, degree_increment, macro_map)
+        if len(new_macro_command) > 0:
+            macro_command_buffer.append(new_macro_command)
+    if len(macro_command) == 0:
         macro_command_buffer.pop(macro_position)
 
 
