@@ -1,6 +1,7 @@
 from control import MAX_ANGLE_FULL, MIN_ANGLE, ControlInput
 
 from move_servo import move_arm_to_pos, decrease_servo_angle, increase_servo_angle
+import copy
 
 
 def execute_black_arm_command(input_command, servomotors, degree_increment):
@@ -76,7 +77,7 @@ def execute_direct_command(input_command, servomotors):
 
 
 def execute_macro_command(input_command, macro_map):
-    return macro_map[ControlInput(input_command).value]
+    return copy.copy(macro_map[ControlInput(input_command).value])
 
 
 def execute_command(input_command, servomotors, degree_increment, macro_map):
