@@ -63,9 +63,9 @@ def execute_silver_arm_command(input_command, servomotors, degree_increment):
 def execute_direct_command(input_command, servomotors):
     match input_command:
         case ControlInput.DIRECT_SELECT_TOOL:
-            tool_grab_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 124.5}, {'ind': 8, 'angle': 141.5},
+            tool_grab_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 109}, {'ind': 8, 'angle': 141.5},
                               {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5},
-                              {'ind': 11, 'lag': .5, 'angle': 118.0}]
+                              {'ind': 11, 'lag': .5, 'angle': 134.0}]
             move_arm_to_pos(tool_grab_pose, servomotors)
         case ControlInput.DIRECT_MOVE_TO_INIT:
             hold_pose = [{'ind': 5, 'angle': 104}, {'ind': 0, 'angle': 50}, {'ind': 1, 'angle': 33},

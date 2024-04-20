@@ -61,8 +61,6 @@ class ControlInput(Enum):
 
 def check_print_angle(gpad, servomotors):
     if keyboard.is_pressed('p'):
-        print(gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERRIGHT))
-        print(gpad.get_axis(pygame.CONTROLLER_AXIS_TRIGGERLEFT))
         for index in range(0, len(servomotors)):
             print('servo:' + str(index) + ' has angle: ', str(servomotors[index].angle_servo))
 
