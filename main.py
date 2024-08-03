@@ -142,43 +142,43 @@ def main():
         clock.tick(120)
 
         new_events = pygame.event.get()
-        if len(new_events) != 0:
-            events = new_events  # for event in events:  #     print(event)
+        # if len(new_events) != 0:
+        #     events = new_events  # for event in events:  #     print(event)
+        #
+        # if len(macro_command_buffer) > 0:
+        #     run_macro_tick(macro_command_buffer, macro_map)
+        #     continue
 
-        if len(macro_command_buffer) > 0:
-            run_macro_tick(macro_command_buffer, macro_map)
-            continue
+        # if not record_to_buffer_requested:
+        #     record_to_buffer_requested = check_record()
 
-        if not record_to_buffer_requested:
-            record_to_buffer_requested = check_record()
+        # record_to_buffer_requested = check_end_record(record_to_buffer_requested)
 
-        record_to_buffer_requested = check_end_record(record_to_buffer_requested)
-
-        if not replay_buffer_requested:
-            replay_buffer_requested = check_replay()
+        # if not replay_buffer_requested:
+        #     replay_buffer_requested = check_replay()
 
         check_print_angle(gamepad, servomotors)
 
-        if not save_on_replay_requested:
-            save_on_replay_requested = check_save_record()
+        # if not save_on_replay_requested:
+        #     save_on_replay_requested = check_save_record()
 
         new_macro_command_buffer = []
-
-        if replay_buffer_requested:
-            if len(recorded_buffer) == 0:
-                replay_buffer_requested = False
-                print("finished replaying!")
-                if save_on_replay_requested:
-                    save_replay_to_file(save_buffer)
-                    save_on_replay_requested = False
-            else:
-                new_macro_command_buffer = replay_command_from_buffer(recorded_buffer, save_buffer,
-                                                                      save_on_replay_requested, macro_map)
-        else:
-            new_macro_command_buffer = execute_gamepad_inputs(gamepad, record_to_buffer_requested, recorded_buffer,
+        #
+        # if replay_buffer_requested:
+        #     if len(recorded_buffer) == 0:
+        #         replay_buffer_requested = False
+        #         print("finished replaying!")
+        #         if save_on_replay_requested:
+        #             save_replay_to_file(save_buffer)
+        #             save_on_replay_requested = False
+        #     else:
+        #         new_macro_command_buffer = replay_command_from_buffer(recorded_buffer, save_buffer,
+        #                                                               save_on_replay_requested, macro_map)
+        # else:
+        execute_gamepad_inputs(gamepad, record_to_buffer_requested, recorded_buffer,
                                                               macro_map)
-        if len(new_macro_command_buffer) > 0:
-            macro_command_buffer.extend(new_macro_command_buffer)
+        # if len(new_macro_command_buffer) > 0:
+        #     macro_command_buffer.extend(new_macro_command_buffer)
 
 
 if __name__ == "__main__":

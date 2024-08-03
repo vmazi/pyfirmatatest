@@ -88,7 +88,7 @@ def execute_command(input_command, servomotors, degree_increment, macro_map):
         execute_silver_arm_command(input_command, servomotors, degree_increment)
         return []
     elif input_command.value.startswith("DIRECT"):
-        execute_direct_command(input_command, servomotors)
+        # execute_direct_command(input_command, servomotors)
         return []
-    else:
-        return execute_macro_command(input_command, macro_map)
+    # else:
+    #      return execute_macro_command(input_command, macro_map)
