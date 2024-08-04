@@ -26,9 +26,6 @@ servomotors = []
 
 
 def setup_arm_control():
-    # pygame.init()
-    joysticks = []
-
     for i in range(2, 14):
         servo_motor = Servo(servo_init_angle[i - 2], i)
         servo_motor.servo.write(servo_motor.angle_servo)
