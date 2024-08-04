@@ -26,7 +26,7 @@ servomotors = []
 
 
 def setup_arm_control():
-    pygame.init()
+    # pygame.init()
     joysticks = []
 
     for i in range(2, 14):
@@ -34,14 +34,14 @@ def setup_arm_control():
         servo_motor.servo.write(servo_motor.angle_servo)
         servomotors.append(servo_motor)
     # for al the connected joysticks
-    for i in range(0, pygame.joystick.get_count()):
-        # create a Joystick object in our list
-        joysticks.append(pygame.joystick.Joystick(i))
-        # initialize the appended joystick (-1 means last array item)
-        joysticks[-1].init()
-        # print a statement telling what the name of the controller is
-        print('Detected joystick ' + joysticks[-1].get_name() + '')
-    return joysticks
+    # for i in range(0, pygame.joystick.get_count()):
+    #     # create a Joystick object in our list
+    #     joysticks.append(pygame.joystick.Joystick(i))
+    #     # initialize the appended joystick (-1 means last array item)
+    #     joysticks[-1].init()
+    #     # print a statement telling what the name of the controller is
+    #     print('Detected joystick ' + joysticks[-1].get_name() + '')
+    # return joysticks
 
 
 def is_file_macro(file_name):
@@ -89,8 +89,8 @@ def run_macro_tick(macro_command_buffer, macro_map):
         macro_command_buffer.pop(macro_position)
 
 
-def execute_gamepad_inputs(gamepad, record_to_buffer, recorded_buffer, macro_map):
-    command_buffer = generate_commands(gamepad)
+def execute_gamepad_inputs(record_to_buffer, recorded_buffer, macro_map):
+    command_buffer = generate_commands()
     found_macro_commands = []
     for command in command_buffer:
         new_macro_commands = execute_command(command, servomotors, degree_increment, macro_map)
@@ -124,10 +124,10 @@ def save_replay_to_file(save_buffer):
 
 
 def main():
-    joysticks = setup_arm_control()
+    setup_arm_control()
     events = []
     # %% while loop
-    gamepad = joysticks[-1]
+    # gamepad = joysticks[-1]
 
     clock = pygame.time.Clock()
     record_to_buffer_requested = False
@@ -175,7 +175,7 @@ def main():
         #         new_macro_command_buffer = replay_command_from_buffer(recorded_buffer, save_buffer,
         #                                                               save_on_replay_requested, macro_map)
         # else:
-        execute_gamepad_inputs(gamepad, record_to_buffer_requested, recorded_buffer,
+        execute_gamepad_inputs(record_to_buffer_requested, recorded_buffer,
                                                               macro_map)
         # if len(new_macro_command_buffer) > 0:
         #     macro_command_buffer.extend(new_macro_command_buffer)

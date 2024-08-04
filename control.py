@@ -59,7 +59,7 @@ class ControlInput(Enum):
     MACRO_TOOL_SELECT = "MACRO_TOOL_SELECT"
 
 
-def check_print_angle(gpad, servomotors):
+def check_print_angle(servomotors):
     if keyboard.is_pressed('p'):
         for index in range(0, len(servomotors)):
             print('servo:' + str(index) + ' has angle: ', str(servomotors[index].angle_servo))
@@ -92,9 +92,9 @@ def check_save_record():
         return True
 
 
-def check_tool_ing_execute(gamepad, buffer):
-    if gamepad.get_button(9):
-        buffer.append(ControlInput.MACRO_GRAB_INGREDIENT)
+# def check_tool_ing_execute(buffer):
+#     if get_button(9):
+#         buffer.append(ControlInput.MACRO_GRAB_INGREDIENT)
 
 
 def check_black_claw_grab(buffer):
@@ -111,51 +111,49 @@ def check_black_claw_rotate(buffer):
         buffer.append(ControlInput.BLACK_CLAW_ROT_DEC)
 
 
-def check_black_tert_vert(gpad, buffer):
+def check_black_tert_vert(buffer):
     if keyboard.is_pressed('n'):
         buffer.append(ControlInput.BLACK_TERT_VERT_DEC)
     elif keyboard.is_pressed('m'):
         buffer.append(ControlInput.BLACK_TERT_VERT_INC)
 
 
-def check_black_secondary_vert(gpad, buffer):
+def check_black_secondary_vert(buffer):
     if keyboard.is_pressed('i'):
         buffer.append(ControlInput.BLACK_SEC_VERT_DEC)
     elif keyboard.is_pressed('o'):
         buffer.append(ControlInput.BLACK_SEC_VERT_INC)
 
 
-def check_black_primary_vert(gpad, buffer):
+def check_black_primary_vert(buffer):
     if keyboard.is_pressed('k'):
         buffer.append(ControlInput.BLACK_PRI_VERT_INC)
     elif keyboard.is_pressed('l'):
         buffer.append(ControlInput.BLACK_PRI_VERT_DEC)
 
 
-def check_black_base_rotate(gpad, buffer):
+def check_black_base_rotate(buffer):
     if keyboard.is_pressed(','):
         buffer.append(ControlInput.BLACK_BASE_ROT_INC)
     elif keyboard.is_pressed('.'):
         buffer.append(ControlInput.BLACK_BASE_ROT_DEC)
 
 
-def check_claw_grab(gpad, buffer):
+def check_claw_grab(buffer):
     if keyboard.is_pressed('r'):
         buffer.append(ControlInput.SILVER_CLAW_GRAB_INC)
     elif keyboard.is_pressed('t'):
         buffer.append(ControlInput.SILVER_CLAW_GRAB_DEC)
 
 
-def check_claw_rotate(gpad, buffer):
+def check_claw_rotate(buffer):
     if keyboard.is_pressed('f'):
         buffer.append(ControlInput.SILVER_CLAW_ROT_DEC)
     elif keyboard.is_pressed('g'):
         buffer.append(ControlInput.SILVER_CLAW_ROT_INC)
 
 
-def check_tert_vert(gamepad, buffer):
-    horizontal_axis_l = gamepad.get_axis(0)
-    vertical_axis_l = gamepad.get_axis(1)
+def check_tert_vert(buffer):
 
     if keyboard.is_pressed('v'):
         buffer.append(ControlInput.SILVER_TERT_VERT_DEC)
@@ -163,9 +161,7 @@ def check_tert_vert(gamepad, buffer):
         buffer.append(ControlInput.SILVER_TERT_VERT_INC)
 
 
-def check_secondary_vert(gamepad, buffer):
-    horizontal_axis_l = gamepad.get_axis(0)
-    vertical_axis_l = gamepad.get_axis(1)
+def check_secondary_vert(buffer):
 
     if keyboard.is_pressed('w'):
         buffer.append(ControlInput.SILVER_SEC_VERT_INC)
@@ -173,32 +169,30 @@ def check_secondary_vert(gamepad, buffer):
         buffer.append(ControlInput.SILVER_SEC_VERT_DEC)
 
 
-def check_primary_vert(gamepad, buffer):
-    horizontal_axis_r = gamepad.get_axis(2)
-    vertical_axis_r = gamepad.get_axis(3)
+def check_primary_vert(buffer):
+
     if keyboard.is_pressed('s'):
         buffer.append(ControlInput.SILVER_PRI_VERT_INC)
     elif keyboard.is_pressed('d'):
         buffer.append(ControlInput.SILVER_PRI_VERT_DEC)
 
 
-def check_base_rotate(gamepad, buffer):
-    horizontal_axis_r = gamepad.get_axis(2)
-    vertical_axis_r = gamepad.get_axis(3)
+def check_base_rotate(buffer):
+
     if keyboard.is_pressed('x'):
         buffer.append(ControlInput.SILVER_BASE_ROT_INC)
     elif keyboard.is_pressed('c'):
         buffer.append(ControlInput.SILVER_BASE_ROT_DEC)
 
 
-def check_move_to_tool_select(gpad, command_buffer):
-    if gpad.get_button(8):
-        command_buffer.append(ControlInput.DIRECT_SELECT_TOOL)
+# def check_move_to_tool_select(command_buffer):
+#     if et_button(8):
+#         command_buffer.append(ControlInput.DIRECT_SELECT_TOOL)
 
 
-def check_move_to_init(gpad, command_buffer):
-    if gpad.get_button(7):
-        command_buffer.append(ControlInput.DIRECT_MOVE_TO_INIT)
+# def check_move_to_init(command_buffer):
+#     if et_button(7):
+#         command_buffer.append(ControlInput.DIRECT_MOVE_TO_INIT)
 
 
 def check_stick_up(x_axis, y_axis):
@@ -217,37 +211,37 @@ def check_stick_right(x_axis, y_axis):
     return x_axis > DEADZONE and abs(x_axis) > abs(y_axis)
 
 
-def generate_commands(gamepad):
+def generate_commands():
     command_buffer = []
 
-    check_claw_grab(gamepad, command_buffer)
+    check_claw_grab(command_buffer)
 
-    check_claw_rotate(gamepad, command_buffer)
+    check_claw_rotate(command_buffer)
 
-    check_tert_vert(gamepad, command_buffer)
+    check_tert_vert(command_buffer)
 
-    check_secondary_vert(gamepad, command_buffer)
+    check_secondary_vert(command_buffer)
 
-    check_primary_vert(gamepad, command_buffer)
+    check_primary_vert(command_buffer)
 
-    check_base_rotate(gamepad, command_buffer)
+    check_base_rotate(command_buffer)
 
     check_black_claw_grab(command_buffer)
 
     check_black_claw_rotate(command_buffer)
 
-    check_black_tert_vert(gamepad, command_buffer)
+    check_black_tert_vert(command_buffer)
 
-    check_black_secondary_vert(gamepad, command_buffer)
+    check_black_secondary_vert(command_buffer)
 
-    check_black_primary_vert(gamepad, command_buffer)
+    check_black_primary_vert(command_buffer)
 
-    check_black_base_rotate(gamepad, command_buffer)
+    check_black_base_rotate(command_buffer)
 
-    # check_move_to_tool_select(gamepad, command_buffer)
+    # check_move_to_tool_select( command_buffer)
     #
-    # check_move_to_init(gamepad, command_buffer)
+    # check_move_to_init( command_buffer)
 
-    # check_tool_ing_execute(gamepad, command_buffer)
+    # check_tool_ing_execute( command_buffer)
 
     return command_buffer
