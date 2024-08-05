@@ -55,9 +55,9 @@ def execute_silver_arm_command(input_command, servomotors, degree_increment):
         case ControlInput.SILVER_CLAW_ROT_DEC:
             decrease_servo_angle(7, MIN_ANGLE, servomotors, degree_increment)
         case ControlInput.SILVER_CLAW_GRAB_INC:
-            increase_servo_angle(6, 88, servomotors, degree_increment)
+            increase_servo_angle(6, 90, servomotors, degree_increment)
         case ControlInput.SILVER_CLAW_GRAB_DEC:
-            decrease_servo_angle(6, 40, servomotors, degree_increment)
+            decrease_servo_angle(6, 35, servomotors, degree_increment)
 
 
 def execute_direct_command(input_command, servomotors):
