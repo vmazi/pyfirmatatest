@@ -120,9 +120,9 @@ def check_black_tert_vert(buffer):
 
 def check_black_secondary_vert(buffer):
     if keyboard.is_pressed('i'):
-        buffer.append(ControlInput.BLACK_SEC_VERT_DEC)
-    elif keyboard.is_pressed('o'):
         buffer.append(ControlInput.BLACK_SEC_VERT_INC)
+    elif keyboard.is_pressed('o'):
+        buffer.append(ControlInput.BLACK_SEC_VERT_DEC)
 
 
 def check_black_primary_vert(buffer):
@@ -148,13 +148,12 @@ def check_claw_grab(buffer):
 
 def check_claw_rotate(buffer):
     if keyboard.is_pressed('f'):
-        buffer.append(ControlInput.SILVER_CLAW_ROT_DEC)
-    elif keyboard.is_pressed('g'):
         buffer.append(ControlInput.SILVER_CLAW_ROT_INC)
+    elif keyboard.is_pressed('g'):
+        buffer.append(ControlInput.SILVER_CLAW_ROT_DEC)
 
 
 def check_tert_vert(buffer):
-
     if keyboard.is_pressed('v'):
         buffer.append(ControlInput.SILVER_TERT_VERT_DEC)
     elif keyboard.is_pressed('b'):
@@ -162,7 +161,6 @@ def check_tert_vert(buffer):
 
 
 def check_secondary_vert(buffer):
-
     if keyboard.is_pressed('w'):
         buffer.append(ControlInput.SILVER_SEC_VERT_INC)
     elif keyboard.is_pressed('e'):
@@ -170,7 +168,6 @@ def check_secondary_vert(buffer):
 
 
 def check_primary_vert(buffer):
-
     if keyboard.is_pressed('s'):
         buffer.append(ControlInput.SILVER_PRI_VERT_INC)
     elif keyboard.is_pressed('d'):
@@ -178,7 +175,6 @@ def check_primary_vert(buffer):
 
 
 def check_base_rotate(buffer):
-
     if keyboard.is_pressed('x'):
         buffer.append(ControlInput.SILVER_BASE_ROT_INC)
     elif keyboard.is_pressed('c'):
