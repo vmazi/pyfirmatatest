@@ -62,11 +62,6 @@ def execute_silver_arm_command(input_command, servomotors, degree_increment):
 
 def execute_direct_command(input_command, servomotors):
     match input_command:
-        case ControlInput.DIRECT_SELECT_TOOL:
-            tool_grab_pose = [{'ind': 6, 'angle': 40.5}, {'ind': 7, 'angle': 109}, {'ind': 8, 'angle': 141.5},
-                              {'ind': 9, 'angle': 101.0}, {'ind': 10, 'angle': 107.5},
-                              {'ind': 11, 'lag': .5, 'angle': 134.0}]
-            move_arm_to_pos(tool_grab_pose, servomotors)
         case ControlInput.DIRECT_MOVE_TO_INIT:
             hold_pose = [{'ind': 5, 'angle': 104}, {'ind': 0, 'angle': 50}, {'ind': 1, 'angle': 33},
                          {'ind': 2, 'angle': 47}, {'ind': 3, 'angle': 130}, {'ind': 4, 'angle': 90}]
@@ -84,5 +79,5 @@ def execute_command(input_command, servomotors, degree_increment):
         execute_silver_arm_command(input_command, servomotors, degree_increment)
         return
     elif input_command.value.startswith("DIRECT"):
-        # execute_direct_command(input_command, servomotors)
-        return # else:  #      return execute_macro_command(input_command, macro_map)
+        execute_direct_command(input_command, servomotors)
+        return  # else:  #      return execute_macro_command(input_command, macro_map)

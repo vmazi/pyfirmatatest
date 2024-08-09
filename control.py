@@ -186,9 +186,9 @@ def check_base_rotate(buffer):
 #         command_buffer.append(ControlInput.DIRECT_SELECT_TOOL)
 
 
-# def check_move_to_init(command_buffer):
-#     if et_button(7):
-#         command_buffer.append(ControlInput.DIRECT_MOVE_TO_INIT)
+def check_move_to_init(command_buffer):
+    if keyboard.is_pressed('['):
+        command_buffer.append(ControlInput.DIRECT_MOVE_TO_INIT)
 
 
 def check_stick_up(x_axis, y_axis):
@@ -236,7 +236,7 @@ def generate_commands():
 
     # check_move_to_tool_select( command_buffer)
     #
-    # check_move_to_init( command_buffer)
+    check_move_to_init(command_buffer)
 
     # check_tool_ing_execute( command_buffer)
 
