@@ -45,7 +45,7 @@ def execute_silver_arm_command(input_command, servomotors, degree_increment):
         case ControlInput.SILVER_SEC_VERT_INC:
             increase_servo_angle(9, MAX_ANGLE_FULL, servomotors, degree_increment)
         case ControlInput.SILVER_SEC_VERT_DEC:
-            decrease_servo_angle(9, MIN_ANGLE, servomotors, degree_increment)
+            decrease_servo_angle(9, 0, servomotors, degree_increment)
         case ControlInput.SILVER_TERT_VERT_INC:
             increase_servo_angle(8, MAX_ANGLE_FULL, servomotors, degree_increment)
         case ControlInput.SILVER_TERT_VERT_DEC:
